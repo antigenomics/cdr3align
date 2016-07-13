@@ -1,5 +1,6 @@
 package com.antigenomics.cdr3align
 
+import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
 import com.milaboratory.core.alignment.LinearGapAlignmentScoring
 import com.milaboratory.core.sequence.AminoAcidSequence
 import groovyx.gpars.GParsPool
@@ -12,8 +13,8 @@ class ScoringProblem extends AbstractProblem {
     final Collection<RecordAlignment> alignments
     final int nPositionalWeights
 
-    static final double MAX_DIAG = 1.0, MIN_NON_DIAG = -1.0, MIN_GAP = -1.0, VAR_FACTOR = 1000,
-                        SCORE_RANGE = 20 * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
+    static final float MAX_DIAG = 1.0, MIN_NON_DIAG = -1.0, MIN_GAP = -1.0, VAR_FACTOR = 1000,
+                       SCORE_RANGE = 20 * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
 
     static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2,
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
@@ -29,23 +30,23 @@ class ScoringProblem extends AbstractProblem {
 
     @Override
     void evaluate(Solution solution) {
-        def solutionInfo = decode(solution)
+        def scoring = decode(solution)
 
         int TP = 0, FP = 0, TN = 0, FN = 0
 
 
         GParsPool.withPool(Runtime.getRuntime().availableProcessors()) {
             alignments.eachParallel { RecordAlignment recordAlignment ->
-                double score = solutionInfo.computeScore(recordAlignment.alignment)
+                double score = scoring.computeScore(recordAlignment.alignment)
 
                 if (recordAlignment.antigensMatch) {
-                    if (score >= solutionInfo.threshold) {
+                    if (score >= scoring.scoreThreshold) {
                         TP++
                     } else {
                         FN++
                     }
                 } else {
-                    if (score >= solutionInfo.threshold) {
+                    if (score >= scoring.scoreThreshold) {
                         FP++
                     } else {
                         TN++
@@ -77,13 +78,13 @@ class ScoringProblem extends AbstractProblem {
         int gapPenalty = VAR_FACTOR * vars[k]
         def scoring = new LinearGapAlignmentScoring(AminoAcidSequence.ALPHABET, substitutionMatrix, gapPenalty)
 
-        double[] posWeights = new double[nPositionalWeights]
+        float[] posWeights = new float[nPositionalWeights]
         for (int i = 0; i < nPositionalWeights; i++) {
             posWeights[i] = vars[++k]
         }
-        def threshold = VAR_FACTOR * vars[++k]
+        def threshold = (float) (VAR_FACTOR * vars[++k])
 
-        new SolutionInfo(scoring, posWeights, threshold)
+        new VdjdbAlignmentScoring(scoring, posWeights, threshold)
     }
 
     @Override

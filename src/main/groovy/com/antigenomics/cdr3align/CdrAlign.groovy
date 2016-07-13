@@ -1,5 +1,7 @@
 package com.antigenomics.cdr3align
 
+import com.antigenomics.vdjdb.scoring.AlignmentScoringProvider
+import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
 import com.milaboratory.core.sequence.AminoAcidSequence
 import com.milaboratory.core.tree.SequenceTreeMap
 import com.milaboratory.core.tree.TreeSearchParameters
@@ -115,34 +117,17 @@ def result = new Executor()
         .withProgressListener(listener).run()
 
 //display the results
-def alphabet = AminoAcidSequence.ALPHABET
-def AAS = ['F', 'S', 'Y', 'C', 'W', 'L', 'P', 'H', 'Q', 'I',
-           'M', 'T', 'N', 'K', 'R', 'V', 'A', 'D', 'E', 'G']
+def outputFolder
 
-new File("../solutions.txt").withPrintWriter { pw ->
-    pw.println("id\tparameter\tfrom\tto\tvalue")
-    result.eachWithIndex { Solution solution, int index ->
-        def info = problem.decode(solution)
+new File(outputFolder).mkdirs()
 
-        AAS.each { from ->
-            AAS.each { to ->
-                int score = info.scoring.getScore(alphabet.symbolToCode(from.charAt(0)),
-                        alphabet.symbolToCode(to.charAt(0)))
-                pw.println(index + "\tsubstitution\t" + from + "\t" + to + "\t" + score)
-            }
-        }
-
-        pw.println(index + "\tgap\tNA\tNA\t" + info.scoring.gapPenalty)
-        pw.println(index + "\tthreshold\tNA\tNA\t" + info.threshold)
-        info.positionWeights.eachWithIndex { double value, int i ->
-            pw.println(index + "\tposition_weight\t" + i + "\tNA\t" + value)
-        }
-    }
-}
-
-new File("../roc.txt").withPrintWriter { pw ->
+def scoringsById = new HashMap<String, VdjdbAlignmentScoring>()
+new File("$outputFolder/roc.txt").withPrintWriter { pw ->
     pw.println("id\tsensitivity\tspecificity")
     result.eachWithIndex { Solution solution, int index ->
         pw.println(index + "\t" + solution.getObjective(0) + "\t" + solution.getObjective(1))
+        scoringsById.put(index.toString(), problem.decode(solution))
     }
 }
+
+AlignmentScoringProvider.saveScoring(scoringsById, "$outputFolder/solutions.txt")
