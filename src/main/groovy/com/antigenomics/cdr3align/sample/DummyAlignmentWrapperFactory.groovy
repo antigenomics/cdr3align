@@ -1,5 +1,7 @@
-package com.antigenomics.cdr3align.alignment
+package com.antigenomics.cdr3align.sample
 
+import com.antigenomics.cdr3align.alignment.AlignmentWrapper
+import com.antigenomics.cdr3align.alignment.AlignmentWrapperFactory
 import com.milaboratory.core.alignment.Alignment
 import com.milaboratory.core.sequence.AminoAcidSequence
 

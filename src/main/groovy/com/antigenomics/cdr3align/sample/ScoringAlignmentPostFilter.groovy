@@ -1,5 +1,6 @@
-package com.antigenomics.cdr3align.alignment
+package com.antigenomics.cdr3align.sample
 
+import com.antigenomics.cdr3align.alignment.AlignmentPostFilter
 import com.antigenomics.vdjdb.scoring.AlignmentScoring
 import com.milaboratory.core.alignment.Alignment
 
