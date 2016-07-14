@@ -1,4 +1,4 @@
-package com.antigenomics.cdr3align
+package com.antigenomics.cdr3align.train
 
 import com.milaboratory.core.sequence.AminoAcidSequence
 
