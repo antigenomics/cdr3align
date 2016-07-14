@@ -21,7 +21,8 @@ def sout = {
 def DEFAULT_CONF_THRESHOLD = "1", DEFAULT_SPECIES = "HomoSapiens",
     DEFAULT_GENES = "TRA,TRB", DEFAULT_MIN_CDR3_PER_AG = "2",
     DEFAULT_SCOPE = "5,2,2,7", DEFAULT_PATH = "vdjdb.slim.txt",
-    DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "1000"
+    DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "1000",
+    DEFAULT_THREADS = Runtime.getRuntime().availableProcessors().toString()
 
 
 def cli = new CliBuilder(usage: "TrainAlignerScoring [options] output_folder/")
@@ -43,6 +44,8 @@ cli._(longOpt: "moea-pop-size", argName: "50-250", args: 1,
         "MOEA population size. [default=$DEFAULT_MOEA_POP_SIZE]")
 cli._(longOpt: "moea-gen", argName: "100+", args: 1,
         "Number of MOEA generations to run. [default=$DEFAULT_MOEA_GEN]")
+cli._(longOpt: "threads", argName: "1+", args: 1,
+        "Number of threads to distribute on. [default=$DEFAULT_THREADS]")
 
 def opt = cli.parse(args)
 
@@ -63,7 +66,8 @@ def outputFolder = opt.arguments()[-1],
     searchScope = (opt.'search-scope' ?: DEFAULT_SCOPE).split(",").collect { it.toInteger() },
     vdjdbSlimPath = opt.'vdjdb-slim-path' ?: DEFAULT_PATH,
     moeaPopSize = (opt.'moea-pop-size' ?: DEFAULT_MOEA_POP_SIZE).toInteger(),
-    moeaGen = (opt.'moea-gen' ?: DEFAULT_MOEA_GEN).toInteger()
+    moeaGen = (opt.'moea-gen' ?: DEFAULT_MOEA_GEN).toInteger(),
+    threads = (opt.'threads' ?: DEFAULT_THREADS).toInteger()
 
 // requires a pre-built database
 // load records
@@ -120,7 +124,7 @@ sout "Performing alignments."
 def alignments = new ConcurrentLinkedQueue<RecordAlignment>()
 def counter = new AtomicInteger()
 
-GParsPool.withPool(Runtime.getRuntime().availableProcessors()) {
+GParsPool.withPool(threads) {
     treeMap.values().eachParallel { Record from ->
         def iter = treeMap.getNeighborhoodIterator(from.cdr3, searchParameters)
         def to
@@ -154,7 +158,7 @@ def listener = new ProgressListener() {
 def problem = new ScoringProblem(alignments)
 
 def result = new Executor()
-        .distributeOnAllCores()
+        .distributeOn(threads)
         .withProblem(problem)
         .withAlgorithm("NSGAII")
         .withProperty("populationSize", moeaPopSize)

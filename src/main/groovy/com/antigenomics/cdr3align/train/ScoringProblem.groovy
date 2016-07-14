@@ -3,7 +3,6 @@ package com.antigenomics.cdr3align.train
 import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
 import com.milaboratory.core.alignment.LinearGapAlignmentScoring
 import com.milaboratory.core.sequence.AminoAcidSequence
-import groovyx.gpars.GParsPool
 import org.moeaframework.core.Solution
 import org.moeaframework.core.variable.EncodingUtils
 import org.moeaframework.core.variable.RealVariable
@@ -21,7 +20,8 @@ class ScoringProblem extends AbstractProblem {
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
                      N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/
 
-    ScoringProblem(Collection<RecordAlignment> alignments, int nPositionalWeights = 11) {
+    ScoringProblem(Collection<RecordAlignment> alignments,
+                   int nPositionalWeights = 11) {
         super(N_VARS + nPositionalWeights, 2)
         this.alignments = alignments
         this.nPositionalWeights = nPositionalWeights
@@ -34,26 +34,25 @@ class ScoringProblem extends AbstractProblem {
 
         int TP = 0, FP = 0, TN = 0, FN = 0
 
+//        GParsPool.withPool(Runtime.getRuntime().availableProcessors()) {
+        alignments.each { RecordAlignment recordAlignment ->
+            double score = scoring.computeScore(recordAlignment.alignment)
 
-        GParsPool.withPool(Runtime.getRuntime().availableProcessors()) {
-            alignments.eachParallel { RecordAlignment recordAlignment ->
-                double score = scoring.computeScore(recordAlignment.alignment)
-
-                if (recordAlignment.antigensMatch) {
-                    if (score >= scoring.scoreThreshold) {
-                        TP++
-                    } else {
-                        FN++
-                    }
+            if (recordAlignment.antigensMatch) {
+                if (score >= scoring.scoreThreshold) {
+                    TP++
                 } else {
-                    if (score >= scoring.scoreThreshold) {
-                        FP++
-                    } else {
-                        TN++
-                    }
+                    FN++
+                }
+            } else {
+                if (score >= scoring.scoreThreshold) {
+                    FP++
+                } else {
+                    TN++
                 }
             }
         }
+        //  }
 
         solution.setObjective(0, -TP / (double) Math.max(1, TP + FN))
         solution.setObjective(1, -TN / (double) Math.max(1, TN + FP))
