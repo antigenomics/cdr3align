@@ -8,14 +8,7 @@ class Segment {
     }
 
     boolean equals(o) {
-        if (this.is(o)) return true
-        if (getClass() != o.class) return false
-
-        Segment segment = (Segment) o
-
-        if (name != segment.name) return false
-
-        return true
+        name == ((Segment)o).name
     }
 
     int hashCode() {
