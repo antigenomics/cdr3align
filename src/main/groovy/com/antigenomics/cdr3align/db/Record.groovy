@@ -4,12 +4,15 @@ import com.milaboratory.core.sequence.AminoAcidSequence
 
 class Record {
     final AminoAcidSequence cdr3
+    final List<Segment> vSegments, jSegments
     final Gene gene
     final List<AminoAcidSequence> antigen = new ArrayList<>()
 
-    Record(String gene, String cdr3) {
+    Record(String gene, String cdr3, String vSegments, String jSegments) {
         this.gene = Gene."$gene"
         this.cdr3 = new AminoAcidSequence(cdr3)
+        this.vSegments = vSegments.split(",").collect { SegmentCache.INSTANCE.getOrCreate(it) }
+        this.jSegments = jSegments.split(",").collect { SegmentCache.INSTANCE.getOrCreate(it) }
     }
 
     boolean equals(o) {

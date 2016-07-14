@@ -38,7 +38,7 @@ class VdjdbLoader {
             if (!firstLine) {
                 if (goodRecord(it) && antigenCountMap[it[3]] >= minCdr3PerAg) {
                     def record
-                    recordMap.put(it[1], record = (recordMap[it[0]] ?: new Record(it[0], it[1])))
+                    recordMap.put(it[1], record = (recordMap[it[0]] ?: new Record(it[0], it[1], it[7], it[9])))
                     record.antigen.add(new AminoAcidSequence(it[3]))
                 }
             } else {

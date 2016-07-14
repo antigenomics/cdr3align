@@ -35,6 +35,10 @@ cli._(longOpt: "search-scope", argName: "s,i,d,t", args: 1,
                 "deletions (d) and total number of mutations. [default=$DEFAULT_SCOPE]")
 cli._(longOpt: "vdjdb-slim-path", argName: "path/to/vdjdb.slim.txt", args: 1,
         "Path to vdjdb table in slim format. [default=$DEFAULT_PATH]")
+cli._(longOpt: "only-v-match", "Only evaluate alignments between CDR3 sequences " +
+        "that have at least one matching V segment.")
+cli._(longOpt: "only-j-match", "Only evaluate alignments between CDR3 sequences " +
+        "that have at least one matching V segment.")
 cli._(longOpt: "moea-pop-size", argName: "50-250", args: 1,
         "MOEA population size. [default=$DEFAULT_MOEA_POP_SIZE]")
 cli._(longOpt: "moea-gen", argName: "100+", args: 1,
@@ -60,6 +64,7 @@ def outputFolder = opt.arguments()[-1],
     minCdr3PerAg = (opt.'min-cdr3-per-ag' ?: DEFAULT_MIN_CDR3_PER_AG).toInteger(),
     searchScope = (opt.'search-scope' ?: DEFAULT_SCOPE).split(",").collect { it.toInteger() },
     vdjdbSlimPath = opt.'vdjdb-slim-path' ?: DEFAULT_PATH,
+    onlyVMatch = (boolean) opt.'only-v-match', onlyJMatch = (boolean) opt.'only-j-match',
     moeaPopSize = (opt.'moea-pop-size' ?: DEFAULT_MOEA_POP_SIZE).toInteger(),
     moeaGen = (opt.'moea-gen' ?: DEFAULT_MOEA_GEN).toInteger(),
     threads = (opt.'threads' ?: DEFAULT_THREADS).toInteger()
@@ -74,7 +79,8 @@ def records = new VdjdbLoader(vdjdbSlimPath).load(vdjdbConfThreshold, genes, spe
 sout "Loaded ${records.size()} unique CDR3s."
 
 // align all-vs-all
-def batchAligner = new VdjdbBatchAligner(searchScope[0], searchScope[2], searchScope[1], searchScope[3])
+def batchAligner = new VdjdbBatchAligner(searchScope[0], searchScope[2], searchScope[1], searchScope[3],
+        onlyVMatch, onlyJMatch)
 
 batchAligner.add(records)
 
