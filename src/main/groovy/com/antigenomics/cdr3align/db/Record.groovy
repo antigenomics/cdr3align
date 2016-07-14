@@ -1,8 +1,8 @@
-package com.antigenomics.cdr3align.train
+package com.antigenomics.cdr3align.db
 
 import com.milaboratory.core.sequence.AminoAcidSequence
 
-class Record implements Serializable {
+class Record {
     final AminoAcidSequence cdr3
     final Gene gene
     final List<AminoAcidSequence> antigen = new ArrayList<>()

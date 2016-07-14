@@ -1,17 +1,14 @@
-package com.antigenomics.cdr3align.train
+package com.antigenomics.cdr3align.db
 
+import com.antigenomics.cdr3align.alignment.AlignmentWrapper
 import com.milaboratory.core.alignment.Alignment
 import com.milaboratory.core.sequence.AminoAcidSequence
 
-class RecordAlignment implements Serializable {
-    final Record record1, record2
-    final Alignment<AminoAcidSequence> alignment
+class RecordAlignment extends AlignmentWrapper<Record> {
     final boolean antigensMatch
 
     RecordAlignment(Record record1, Record record2, Alignment<AminoAcidSequence> alignment) {
-        this.record1 = record1
-        this.record2 = record2
-        this.alignment = alignment
+        super(record1, record2, alignment)
         this.antigensMatch = record1.antigen.any { record2.antigen.contains(it) }
     }
 }

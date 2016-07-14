@@ -1,5 +1,6 @@
 package com.antigenomics.cdr3align.train
 
+import com.antigenomics.cdr3align.db.RecordAlignment
 import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
 import com.milaboratory.core.alignment.LinearGapAlignmentScoring
 import com.milaboratory.core.sequence.AminoAcidSequence
@@ -34,7 +35,6 @@ class ScoringProblem extends AbstractProblem {
 
         int TP = 0, FP = 0, TN = 0, FN = 0
 
-//        GParsPool.withPool(Runtime.getRuntime().availableProcessors()) {
         alignments.each { RecordAlignment recordAlignment ->
             double score = scoring.computeScore(recordAlignment.alignment)
 
@@ -52,7 +52,6 @@ class ScoringProblem extends AbstractProblem {
                 }
             }
         }
-        //  }
 
         solution.setObjective(0, -TP / (double) Math.max(1, TP + FN))
         solution.setObjective(1, -TN / (double) Math.max(1, TN + FP))

@@ -1,18 +1,13 @@
 package com.antigenomics.cdr3align.train
 
+import com.antigenomics.cdr3align.db.VdjdbBatchAligner
+import com.antigenomics.cdr3align.db.VdjdbLoader
 import com.antigenomics.vdjdb.scoring.AlignmentScoringProvider
 import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
-import com.milaboratory.core.sequence.AminoAcidSequence
-import com.milaboratory.core.tree.SequenceTreeMap
-import com.milaboratory.core.tree.TreeSearchParameters
-import groovyx.gpars.GParsPool
 import org.moeaframework.Executor
 import org.moeaframework.core.Solution
 import org.moeaframework.util.progress.ProgressEvent
 import org.moeaframework.util.progress.ProgressListener
-
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.atomic.AtomicInteger
 
 def sout = {
     println "[CDRALING ${new Date().toString()}] $it"
@@ -60,8 +55,8 @@ if (opt.h || opt.arguments().size() == 0) {
 
 def outputFolder = opt.arguments()[-1],
     vdjdbConfThreshold = (opt.'vdjdb-conf-threshold' ?: DEFAULT_CONF_THRESHOLD).toInteger(),
-    species = (opt.'species' ?: DEFAULT_SPECIES).split(","),
-    genes = (opt.'genes' ?: DEFAULT_GENES).split(","),
+    species = (opt.'species' ?: DEFAULT_SPECIES).split(",") as List<String>,
+    genes = (opt.'genes' ?: DEFAULT_GENES).split(",") as List<String>,
     minCdr3PerAg = (opt.'min-cdr3-per-ag' ?: DEFAULT_MIN_CDR3_PER_AG).toInteger(),
     searchScope = (opt.'search-scope' ?: DEFAULT_SCOPE).split(",").collect { it.toInteger() },
     vdjdbSlimPath = opt.'vdjdb-slim-path' ?: DEFAULT_PATH,
@@ -74,76 +69,18 @@ def outputFolder = opt.arguments()[-1],
 
 sout "Loading database"
 
-def recordMap = new HashMap<String, Record>()
+def records = new VdjdbLoader(vdjdbSlimPath).load(vdjdbConfThreshold, genes, species, minCdr3PerAg)
 
-def antigenCountMap = new HashMap<String, Integer>()
-
-def goodRecord = { List<String> record ->
-    record[-1].toInteger() >= vdjdbConfThreshold &&
-            genes.any { it.equalsIgnoreCase(record[0]) } &&
-            species.any { it.equalsIgnoreCase(record[2]) }
-}
-
-def firstLine = true
-new File(vdjdbSlimPath).splitEachLine("\t") {
-    if (!firstLine) {
-        if (goodRecord(it)) {
-            antigenCountMap.put(it[3], (antigenCountMap[it[3]] ?: 0) + 1)
-        }
-    } else {
-        firstLine = false
-    }
-}
-
-firstLine = true
-new File(vdjdbSlimPath).splitEachLine("\t") {
-    if (!firstLine) {
-        if (goodRecord(it) && antigenCountMap[it[3]] >= minCdr3PerAg) {
-            def record
-            recordMap.put(it[1], record = (recordMap[it[0]] ?: new Record(it[0], it[1])))
-            record.antigen.add(new AminoAcidSequence(it[3]))
-        }
-    } else {
-        firstLine = false
-    }
-}
-
-sout "Loaded ${recordMap.size()} unique CDR3s."
+sout "Loaded ${records.size()} unique CDR3s."
 
 // align all-vs-all
-def searchParameters = new TreeSearchParameters(searchScope[0], searchScope[2], searchScope[1], searchScope[3])
+def batchAligner = new VdjdbBatchAligner(searchScope[0], searchScope[2], searchScope[1], searchScope[3])
 
-def treeMap = new SequenceTreeMap<AminoAcidSequence, Record>(AminoAcidSequence.ALPHABET)
-
-recordMap.values().each {
-    treeMap.put(it.cdr3, it)
-}
+batchAligner.add(records)
 
 sout "Performing alignments."
 
-def alignments = new ConcurrentLinkedQueue<RecordAlignment>()
-def counter = new AtomicInteger()
-
-GParsPool.withPool(threads) {
-    treeMap.values().eachParallel { Record from ->
-        def iter = treeMap.getNeighborhoodIterator(from.cdr3, searchParameters)
-        def to
-
-        def toCdr3Hash = new HashSet<Record>()
-        while ((to = iter.next()) != null) {
-            if (from.cdr3 != to.cdr3 && from.gene == to.gene && !toCdr3Hash.contains(to)) {
-                alignments.add(new RecordAlignment(from, to, iter.currentAlignment))
-                toCdr3Hash.add(to)
-            }
-        }
-
-        int counterVal
-        if ((counterVal = counter.incrementAndGet()) % 100 == 0) {
-            sout "Done all alignments for $counterVal records, " +
-                    "total number of aligned CDR3 pairs is ${alignments.size()}"
-        }
-    }
-}
+def alignments = batchAligner.align(threads)
 
 sout "Done, ${alignments.size()} alignments performed. Proceeding to optimization"
 
@@ -151,7 +88,10 @@ sout "Done, ${alignments.size()} alignments performed. Proceeding to optimizatio
 def listener = new ProgressListener() {
     @Override
     void progressUpdate(ProgressEvent event) {
-        sout "[MOEA stats] Number of generations = " + (event.currentNFE / moeaPopSize)
+        int ngen = event.currentNFE / moeaPopSize
+        if (ngen % 10 == 0) {
+            sout "[MOEA stats] Number of generations = " + ngen
+        }
     }
 }
 
