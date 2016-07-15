@@ -6,6 +6,7 @@ class VdjdbBatchAligner extends BatchAligner<Record, RecordAlignment> {
     VdjdbBatchAligner(int mismatches, int deletions, int insertions, int total,
                       boolean requireVMatch, boolean requireJMatch) {
         super(mismatches, deletions, insertions, total,
+                true,
                 new RecordCdr3Provider<>(),
                 new RecordAlignmentWrapperFactory<>(),
                 new RecordAlignmentPreFilter<>(requireVMatch, requireJMatch),

@@ -9,6 +9,7 @@ class SampleBatchAligner extends BatchAligner<Clonotype, AlignmentWrapper<Clonot
     SampleBatchAligner(int mismatches, int deletions, int insertions, int total,
                        AlignmentScoring alignmentScoring) {
         super(mismatches, deletions, insertions, total,
+                false,
                 new ClonotypeCdr3Provider(),
                 new DummyAlignmentWrapperFactory<>(),
                 new DummyAlignmentPreFilter<>(),

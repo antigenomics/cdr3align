@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class BatchAligner<T, R extends AlignmentWrapper<T>> {
     final TreeSearchParameters searchParameters
+    final boolean allowSelfAlignments
     final Cdr3Provider<T> cdr3Provider
     final AlignmentWrapperFactory<T, R> alignmentWrapperFactory
     final AlignmentPreFilter<T> alignmentPreFilter
@@ -17,11 +18,13 @@ class BatchAligner<T, R extends AlignmentWrapper<T>> {
     final SequenceTreeMap<AminoAcidSequence, T> treeMap = new SequenceTreeMap<>(AminoAcidSequence.ALPHABET)
 
     BatchAligner(int mismatches, int deletions, int insertions, int total,
+                 boolean allowSelfAlignments,
                  Cdr3Provider<T> cdr3Provider,
                  AlignmentWrapperFactory<T, R> alignmentWrapperFactory,
                  AlignmentPreFilter<T> alignmentPreFilter,
                  AlignmentPostFilterFactory<T> alignmentPostFilterFactory) {
         this.searchParameters = new TreeSearchParameters(mismatches, deletions, insertions, total)
+        this.allowSelfAlignments = allowSelfAlignments
         this.cdr3Provider = cdr3Provider
         this.alignmentWrapperFactory = alignmentWrapperFactory
         this.alignmentPreFilter = alignmentPreFilter
@@ -48,7 +51,8 @@ class BatchAligner<T, R extends AlignmentWrapper<T>> {
                 def toCdr3Hash = new HashSet<AminoAcidSequence>()
                 while ((to = iter.next()) != null) {
                     def toCdr3 = cdr3Provider.getCdr3Aa(to)
-                    if (fromCdr3 != toCdr3 && !toCdr3Hash.contains(toCdr3) &&
+                    if ((allowSelfAlignments || fromCdr3 != toCdr3) &&
+                            !toCdr3Hash.contains(toCdr3) &&
                             alignmentPreFilter.canAlign(from, to)) {
                         def alignment = iter.currentAlignment
                         if (alignmentPostFilter.pass(alignment)) {

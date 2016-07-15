@@ -8,10 +8,10 @@ class Segment {
     }
 
     boolean equals(o) {
-        name == ((Segment)o).name
+        name == ((Segment) o).name
     }
 
     int hashCode() {
-        return name.hashCode()
+        name.hashCode()
     }
 }
