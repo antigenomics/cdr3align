@@ -22,7 +22,7 @@ class ScoringProblem extends AbstractProblem {
                      N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/
 
     ScoringProblem(Collection<RecordAlignment> alignments,
-                   int nPositionalWeights = 11) {
+                   int nPositionalWeights = 7) {
         super(N_VARS + nPositionalWeights, 2)
         this.alignments = alignments
         this.nPositionalWeights = nPositionalWeights
