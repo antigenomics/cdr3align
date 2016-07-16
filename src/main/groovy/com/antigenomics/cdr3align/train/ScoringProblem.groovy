@@ -18,7 +18,7 @@ class ScoringProblem extends AbstractProblem {
     static final float MAX_DIAG = 1.0f, MIN_NON_DIAG = -1.0f, MIN_GAP = -1.0f, VAR_FACTOR = 1000f,
                        SCORE_RANGE = 20f * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
 
-    static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2i,
+    static final int N_SUBST = (int) (AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2),
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
                      N_VARS = N_SUBST + 1i /*gap*/ + 1i /*threshold*/
