@@ -15,18 +15,13 @@ class Record {
         this.jSegments = jSegments.split(",").collect { SegmentCache.INSTANCE.getOrCreate(it) }
     }
 
+    @Override
     boolean equals(o) {
-        if (this.is(o)) return true
-        if (getClass() != o.class) return false
-
-        Record record = (Record) o
-
-        if (cdr3 != record.cdr3) return false
-
-        return true
+        this.cdr3 == ((Record) o).cdr3
     }
 
+    @Override
     int hashCode() {
-        return cdr3.hashCode()
+        cdr3.hashCode()
     }
 }

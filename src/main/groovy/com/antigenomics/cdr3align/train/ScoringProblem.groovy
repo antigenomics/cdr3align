@@ -4,11 +4,13 @@ import com.antigenomics.cdr3align.db.RecordAlignment
 import com.antigenomics.vdjdb.scoring.VdjdbAlignmentScoring
 import com.milaboratory.core.alignment.LinearGapAlignmentScoring
 import com.milaboratory.core.sequence.AminoAcidSequence
+import groovy.transform.CompileStatic
 import org.moeaframework.core.Solution
 import org.moeaframework.core.variable.EncodingUtils
 import org.moeaframework.core.variable.RealVariable
 import org.moeaframework.problem.AbstractProblem
 
+@CompileStatic
 class ScoringProblem extends AbstractProblem {
     final Collection<RecordAlignment> alignments
     final int nPositionalWeights
@@ -37,21 +39,21 @@ class ScoringProblem extends AbstractProblem {
         int TP = 0, FP = 0, TN = 0, FN = 0, trueExact = 0, totalExact = 0
 
         alignments.each { RecordAlignment recordAlignment ->
-            double score = scoring.computeScore(recordAlignment.alignment)
-            if (recordAlignment.tcrData1 == recordAlignment.tcrData2) {
-                if (score >= scoring.scoreThreshold) {
+            boolean passThreshold = scoring.computeScore(recordAlignment.alignment) >= scoring.scoreThreshold
+            if (recordAlignment.cdr3Match) {
+                if (passThreshold) {
                     trueExact++
                 }
                 totalExact++
             } else {
                 if (recordAlignment.antigensMatch) {
-                    if (score >= scoring.scoreThreshold) {
+                    if (passThreshold) {
                         TP++
                     } else {
                         FN++
                     }
                 } else {
-                    if (score >= scoring.scoreThreshold) {
+                    if (passThreshold) {
                         FP++
                     } else {
                         TN++
