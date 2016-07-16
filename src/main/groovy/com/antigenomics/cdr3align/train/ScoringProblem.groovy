@@ -21,12 +21,11 @@ class ScoringProblem extends AbstractProblem {
     static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2,
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
-                     N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/,
-                     N_OBJ = 3
+                     N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/
 
     ScoringProblem(Collection<RecordAlignment> alignments,
                    int nPositionalWeights = 7) {
-        super(N_VARS + nPositionalWeights, N_OBJ)
+        super(N_VARS + nPositionalWeights, 2, 1)
         this.alignments = alignments
         this.nPositionalWeights = nPositionalWeights
         assert nPositionalWeights % 2 == 1
@@ -62,9 +61,9 @@ class ScoringProblem extends AbstractProblem {
             }
         }
 
+        solution.setConstraint(0, 1.0 - trueExact / (double) totalExact)
         solution.setObjective(0, -TP / (double) Math.max(1, TP + FP))
         solution.setObjective(1, -TP / (double) Math.max(1, TP + FN))
-        solution.setObjective(2, -trueExact / (double) totalExact)
     }
 
     VdjdbAlignmentScoring decode(Solution solution) {
@@ -97,7 +96,7 @@ class ScoringProblem extends AbstractProblem {
 
     @Override
     Solution newSolution() {
-        Solution solution = new Solution(N_VARS + nPositionalWeights, N_OBJ)
+        Solution solution = new Solution(N_VARS + nPositionalWeights, 2, 1)
 
         int k = 0
         for (int i = 0; i < N_SUBST_1; i++) {

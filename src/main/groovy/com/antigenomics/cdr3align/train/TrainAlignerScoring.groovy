@@ -121,12 +121,12 @@ new File(outputFolder).mkdirs()
 
 def scoringsById = new HashMap<String, VdjdbAlignmentScoring>()
 new File("$outputFolder/roc.txt").withPrintWriter { pw ->
-    pw.println("id\tprecision\trecall\texact.ratio")
+    pw.println("id\tprecision\trecall\texact.misclassified")
     result.eachWithIndex { Solution solution, int index ->
         pw.println(index + "\t" +
                 (-solution.getObjective(0)) + "\t" +
                 (-solution.getObjective(1)) + "\t" +
-                (-solution.getObjective(2)))
+                (solution.getConstraint(0)))
         scoringsById.put(index.toString(), problem.decode(solution))
     }
 }
