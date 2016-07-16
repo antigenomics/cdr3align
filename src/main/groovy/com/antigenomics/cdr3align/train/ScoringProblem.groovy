@@ -15,13 +15,13 @@ class ScoringProblem extends AbstractProblem {
     final Collection<RecordAlignment> alignments
     final int nPositionalWeights
 
-    static final float MAX_DIAG = 1.0, MIN_NON_DIAG = -1.0, MIN_GAP = -1.0, VAR_FACTOR = 1000,
-                       SCORE_RANGE = 20 * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
+    static final float MAX_DIAG = 1.0f, MIN_NON_DIAG = -1.0f, MIN_GAP = -1.0f, VAR_FACTOR = 1000f,
+                       SCORE_RANGE = 20f * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
 
-    static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2,
+    static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2i,
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
-                     N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/
+                     N_VARS = N_SUBST + 1i /*gap*/ + 1i /*threshold*/
 
     ScoringProblem(Collection<RecordAlignment> alignments,
                    int nPositionalWeights = 7) {
@@ -67,14 +67,14 @@ class ScoringProblem extends AbstractProblem {
     }
 
     VdjdbAlignmentScoring decode(Solution solution) {
-        double[] vars = EncodingUtils.getReal(solution)
+        def vars = EncodingUtils.getReal(solution)
 
-        int[] substitutionMatrix = new int[N_SUBST_2]
+        def substitutionMatrix = new int[N_SUBST_2]
 
         int k = 0
         for (int i = 0; i < N_SUBST_1; i++) {
             for (int j = i; j < N_SUBST_1; j++) {
-                int var = VAR_FACTOR * vars[k]
+                def var = (int) (VAR_FACTOR * vars[k])
                 substitutionMatrix[i * N_SUBST_1 + j] = var
                 if (i != j)
                     substitutionMatrix[j * N_SUBST_1 + i] = var
@@ -82,12 +82,12 @@ class ScoringProblem extends AbstractProblem {
             }
         }
 
-        int gapPenalty = VAR_FACTOR * vars[k]
+        def gapPenalty = (int) (VAR_FACTOR * vars[k])
         def scoring = new LinearGapAlignmentScoring(AminoAcidSequence.ALPHABET, substitutionMatrix, gapPenalty)
 
-        float[] posWeights = new float[nPositionalWeights]
+        def posWeights = new float[nPositionalWeights]
         for (int i = 0; i < nPositionalWeights; i++) {
-            posWeights[i] = vars[++k]
+            posWeights[i] = (float) vars[++k]
         }
         def threshold = (float) (VAR_FACTOR * vars[++k])
 
