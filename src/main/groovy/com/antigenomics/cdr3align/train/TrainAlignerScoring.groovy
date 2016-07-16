@@ -34,8 +34,8 @@ cli._(longOpt: "min-cdr3-per-ag", argName: "1+", args: 1,
 cli._(longOpt: "search-scope", argName: "s,i,d,t", args: 1,
         "Overrides CDR3 sequence initial search parameters: allowed number of substitutions (s), insertions (i), " +
                 "deletions (d) and total number of mutations. [default=$DEFAULT_SCOPE]")
-cli._(longOpt: "pos-weight-len", argName: "5,7,9,11", args: 1,
-        "Length of positional weight vector. [default=$DEFAULT_POS_WEIGHT_LEN]")
+cli._(longOpt: "pos-weight-len", argName: "5-11", args: 1,
+        "Length of positional weight vector (should be odd number). [default=$DEFAULT_POS_WEIGHT_LEN]")
 cli._(longOpt: "vdjdb-slim-path", argName: "path/to/vdjdb.slim.txt", args: 1,
         "Path to vdjdb table in slim format. [default=$DEFAULT_PATH]")
 cli._(longOpt: "only-v-match", "Only evaluate alignments between CDR3 sequences " +
@@ -121,9 +121,12 @@ new File(outputFolder).mkdirs()
 
 def scoringsById = new HashMap<String, VdjdbAlignmentScoring>()
 new File("$outputFolder/roc.txt").withPrintWriter { pw ->
-    pw.println("id\tsensitivity\tspecificity")
+    pw.println("id\tprecision\trecall\texact.ratio")
     result.eachWithIndex { Solution solution, int index ->
-        pw.println(index + "\t" + solution.getObjective(0) + "\t" + solution.getObjective(1))
+        pw.println(index + "\t" +
+                (-solution.getObjective(0)) + "\t" +
+                (-solution.getObjective(1)) + "\t" +
+                (-solution.getObjective(2)))
         scoringsById.put(index.toString(), problem.decode(solution))
     }
 }

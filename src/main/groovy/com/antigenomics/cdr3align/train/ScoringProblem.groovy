@@ -19,11 +19,12 @@ class ScoringProblem extends AbstractProblem {
     static final int N_SUBST = AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2,
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
-                     N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/
+                     N_VARS = N_SUBST + 1 /*gap*/ + 1 /*threshold*/,
+                     N_OBJ = 3
 
     ScoringProblem(Collection<RecordAlignment> alignments,
                    int nPositionalWeights = 7) {
-        super(N_VARS + nPositionalWeights, 2)
+        super(N_VARS + nPositionalWeights, N_OBJ)
         this.alignments = alignments
         this.nPositionalWeights = nPositionalWeights
         assert nPositionalWeights % 2 == 1
@@ -33,28 +34,35 @@ class ScoringProblem extends AbstractProblem {
     void evaluate(Solution solution) {
         def scoring = decode(solution)
 
-        int TP = 0, FP = 0, TN = 0, FN = 0
+        int TP = 0, FP = 0, TN = 0, FN = 0, trueExact = 0, totalExact = 0
 
         alignments.each { RecordAlignment recordAlignment ->
             double score = scoring.computeScore(recordAlignment.alignment)
-
-            if (recordAlignment.antigensMatch) {
+            if (recordAlignment.tcrData1 == recordAlignment.tcrData2) {
                 if (score >= scoring.scoreThreshold) {
-                    TP++
-                } else {
-                    FN++
+                    trueExact++
                 }
+                totalExact++
             } else {
-                if (score >= scoring.scoreThreshold) {
-                    FP++
+                if (recordAlignment.antigensMatch) {
+                    if (score >= scoring.scoreThreshold) {
+                        TP++
+                    } else {
+                        FN++
+                    }
                 } else {
-                    TN++
+                    if (score >= scoring.scoreThreshold) {
+                        FP++
+                    } else {
+                        TN++
+                    }
                 }
             }
         }
 
-        solution.setObjective(0, -TP / (double) Math.max(1, TP + FN))
-        solution.setObjective(1, -TN / (double) Math.max(1, TN + FP))
+        solution.setObjective(0, -TP / (double) Math.max(1, TP + FP))
+        solution.setObjective(1, -TP / (double) Math.max(1, TP + FN))
+        solution.setObjective(2, -trueExact / (double) totalExact)
     }
 
     VdjdbAlignmentScoring decode(Solution solution) {
@@ -87,7 +95,7 @@ class ScoringProblem extends AbstractProblem {
 
     @Override
     Solution newSolution() {
-        Solution solution = new Solution(N_VARS + nPositionalWeights, 2)
+        Solution solution = new Solution(N_VARS + nPositionalWeights, N_OBJ)
 
         int k = 0
         for (int i = 0; i < N_SUBST_1; i++) {
