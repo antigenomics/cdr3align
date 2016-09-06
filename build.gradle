@@ -41,5 +41,5 @@ dependencies {
     compile 'org.codehaus.gpars:gpars:1.0.0'
     compile 'junit:junit:4.12'
     compile 'com.milaboratory:milib:1.0'
-    compile 'com.antigenomics:vdjdb:1.1.2'
+    compile 'com.antigenomics:vdjdb:1.1.4-SNAPSHOT'
 }
