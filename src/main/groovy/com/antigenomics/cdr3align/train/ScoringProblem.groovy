@@ -13,22 +13,18 @@ import org.moeaframework.problem.AbstractProblem
 @CompileStatic
 class ScoringProblem extends AbstractProblem {
     final Collection<RecordAlignment> alignments
-    final int nPositionalWeights
 
     static final float MAX_DIAG = 1.0f, MIN_NON_DIAG = -1.0f, MIN_GAP = -1.0f, VAR_FACTOR = 1000f,
-                       SCORE_RANGE = 20f * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
+                       MAX_SIGMA = 3.0f, SCORE_RANGE = 20f * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
 
     static final int N_SUBST = (int) (AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2),
                      N_SUBST_1 = AminoAcidSequence.ALPHABET.size(),
                      N_SUBST_2 = N_SUBST_1 * N_SUBST_1,
-                     N_VARS = N_SUBST + 1i /*gap*/ + 1i /*threshold*/
+                     N_VARS = N_SUBST + 1i /*sigma*/ + 1i /*mu*/ + 1i /*gap*/ + 1i /*threshold*/
 
-    ScoringProblem(Collection<RecordAlignment> alignments,
-                   int nPositionalWeights = 7) {
-        super(N_VARS + nPositionalWeights, 2, 1)
+    ScoringProblem(Collection<RecordAlignment> alignments) {
+        super(N_VARS, 2, 1)
         this.alignments = alignments
-        this.nPositionalWeights = nPositionalWeights
-        assert nPositionalWeights % 2 == 1
     }
 
     @Override
@@ -85,18 +81,16 @@ class ScoringProblem extends AbstractProblem {
         def gapPenalty = (int) (VAR_FACTOR * vars[k])
         def scoring = new LinearGapAlignmentScoring(AminoAcidSequence.ALPHABET, substitutionMatrix, gapPenalty)
 
-        def posWeights = new float[nPositionalWeights]
-        for (int i = 0; i < nPositionalWeights; i++) {
-            posWeights[i] = (float) vars[++k]
-        }
+        def posSigma = (float) vars[++k];
+        def posMu = (float) vars[++k];
         def threshold = (float) (VAR_FACTOR * vars[++k])
 
-        new VdjdbAlignmentScoring(scoring, posWeights, threshold)
+        new VdjdbAlignmentScoring(scoring, posSigma, posMu, threshold)
     }
 
     @Override
     Solution newSolution() {
-        Solution solution = new Solution(N_VARS + nPositionalWeights, 2, 1)
+        Solution solution = new Solution(N_VARS, 2, 1)
 
         int k = 0
         for (int i = 0; i < N_SUBST_1; i++) {
@@ -108,11 +102,8 @@ class ScoringProblem extends AbstractProblem {
         }
 
         solution.setVariable(k, new RealVariable(MIN_GAP, -2 / VAR_FACTOR))
-
-        for (int i = 0; i < nPositionalWeights; i++) {
-            solution.setVariable(++k, new RealVariable(0, 1))
-        }
-
+        solution.setVariable(++k, new RealVariable(0.01, MAX_SIGMA))
+        solution.setVariable(++k, new RealVariable(-1.0, 1.0))
         solution.setVariable(++k, new RealVariable(-SCORE_RANGE, SCORE_RANGE))
 
         solution
