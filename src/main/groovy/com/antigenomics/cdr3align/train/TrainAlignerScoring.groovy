@@ -17,7 +17,6 @@ def DEFAULT_CONF_THRESHOLD = "1", DEFAULT_SPECIES = "HomoSapiens",
     DEFAULT_GENES = "TRA,TRB", DEFAULT_MIN_CDR3_PER_AG = "2",
     DEFAULT_SCOPE = "5,2,2,7", DEFAULT_PATH = "vdjdb.slim.txt",
     DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "1000",
-    DEFAULT_POS_WEIGHT_LEN = "7",
     DEFAULT_THREADS = Runtime.getRuntime().availableProcessors().toString()
 
 
@@ -34,8 +33,6 @@ cli._(longOpt: "min-cdr3-per-ag", argName: "1+", args: 1,
 cli._(longOpt: "search-scope", argName: "s,i,d,t", args: 1,
         "Overrides CDR3 sequence initial search parameters: allowed number of substitutions (s), insertions (i), " +
                 "deletions (d) and total number of mutations. [default=$DEFAULT_SCOPE]")
-cli._(longOpt: "pos-weight-len", argName: "5-11", args: 1,
-        "Length of positional weight vector (should be odd number). [default=$DEFAULT_POS_WEIGHT_LEN]")
 cli._(longOpt: "vdjdb-slim-path", argName: "path/to/vdjdb.slim.txt", args: 1,
         "Path to vdjdb table in slim format. [default=$DEFAULT_PATH]")
 cli._(longOpt: "only-v-match", "Only evaluate alignments between CDR3 sequences " +
@@ -66,7 +63,6 @@ def outputFolder = opt.arguments()[-1],
     genes = (opt.'genes' ?: DEFAULT_GENES).split(",") as List<String>,
     minCdr3PerAg = (opt.'min-cdr3-per-ag' ?: DEFAULT_MIN_CDR3_PER_AG).toInteger(),
     searchScope = (opt.'search-scope' ?: DEFAULT_SCOPE).split(",").collect { it.toInteger() },
-    posWeightLen = (opt.'pos-weight-len' ?: DEFAULT_POS_WEIGHT_LEN).toInteger(),
     vdjdbSlimPath = opt.'vdjdb-slim-path' ?: DEFAULT_PATH,
     onlyVMatch = (boolean) opt.'only-v-match', onlyJMatch = (boolean) opt.'only-j-match',
     moeaPopSize = (opt.'moea-pop-size' ?: DEFAULT_MOEA_POP_SIZE).toInteger(),
@@ -105,7 +101,7 @@ def listener = new ProgressListener() {
     }
 }
 
-def problem = new ScoringProblem(alignments, posWeightLen)
+def problem = new ScoringProblem(alignments)
 
 def result = new Executor()
         .distributeOn(threads)
