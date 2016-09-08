@@ -1,5 +1,6 @@
 package com.antigenomics.cdr3align.train
 
+import com.antigenomics.cdr3align.db.Record
 import com.antigenomics.cdr3align.db.VdjdbBatchAligner
 import com.antigenomics.cdr3align.db.VdjdbLoader
 import com.antigenomics.vdjdb.scoring.AlignmentScoringProvider
@@ -15,7 +16,7 @@ def sout = {
 
 def DEFAULT_CONF_THRESHOLD = "1", DEFAULT_SPECIES = "HomoSapiens",
     DEFAULT_GENES = "TRA,TRB", DEFAULT_MIN_CDR3_PER_AG = "2",
-    DEFAULT_SCOPE = "5,2,2,7", DEFAULT_PATH = "vdjdb.slim.txt",
+    DEFAULT_SCOPE = "5,2,2,7", DEFAULT_PATH = "vdjdb.slim.txt", DEFAULT_NEG_PATH = "cdr3align.neg.txt",
     DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "1000",
     DEFAULT_POS_WEIGHT_LEN = "7",
     DEFAULT_THREADS = Runtime.getRuntime().availableProcessors().toString()
@@ -38,6 +39,8 @@ cli._(longOpt: "pos-weight-len", argName: "1..10", args: 1,
         "Length of positional weight vector (should be odd number). [default=$DEFAULT_POS_WEIGHT_LEN]")
 cli._(longOpt: "vdjdb-slim-path", argName: "path/to/vdjdb.slim.txt", args: 1,
         "Path to vdjdb table in slim format. [default=$DEFAULT_PATH]")
+cli._(longOpt: "neg-control-path", argName: "cdr3align.neg.txt", args: 1,
+        "Path to table with negative control set (columns gene | cdr3 | v | j). [default=$DEFAULT_NEG_PATH]")
 cli._(longOpt: "only-v-match", "Only evaluate alignments between CDR3 sequences " +
         "that have at least one matching V segment.")
 cli._(longOpt: "only-j-match", "Only evaluate alignments between CDR3 sequences " +
@@ -68,6 +71,7 @@ def outputFolder = opt.arguments()[-1],
     searchScope = (opt.'search-scope' ?: DEFAULT_SCOPE).split(",").collect { it.toInteger() },
     posWeightLen = (opt.'pos-weight-len' ?: DEFAULT_POS_WEIGHT_LEN).toInteger(),
     vdjdbSlimPath = opt.'vdjdb-slim-path' ?: DEFAULT_PATH,
+    negControlPath = opt.'neg-control-path' ?: DEFAULT_NEG_PATH,
     onlyVMatch = (boolean) opt.'only-v-match', onlyJMatch = (boolean) opt.'only-j-match',
     moeaPopSize = (opt.'moea-pop-size' ?: DEFAULT_MOEA_POP_SIZE).toInteger(),
     moeaGen = (opt.'moea-gen' ?: DEFAULT_MOEA_GEN).toInteger(),
@@ -76,11 +80,28 @@ def outputFolder = opt.arguments()[-1],
 // requires a pre-built database
 // load records
 
-sout "Loading database"
+sout "Loading database.."
 
 def records = new VdjdbLoader(vdjdbSlimPath).load(vdjdbConfThreshold, genes, species, minCdr3PerAg)
 
 sout "Loaded ${records.size()} unique CDR3s."
+
+if (new File(negControlPath).exists()) {
+    sout "Loading negative set.."
+
+    def existingCdr3 = new HashSet<String>()
+    records.each { existingCdr3.add(it.cdr3.toString()) }
+
+    new File(negControlPath).splitEachLine("\t") { splitLine ->
+        def gene = splitLine[0], cdr3 = splitLine[1]
+
+        if (genes.any { it.equalsIgnoreCase(gene) } && !existingCdr3.contains(cdr3)) { // prevent exact matches
+            records.add(new Record(gene, cdr3, splitLine[2], splitLine[3]))
+        }
+    }
+
+    sout "Loaded in total ${records.size()} unique CDR3s."
+}
 
 // align all-vs-all
 def batchAligner = new VdjdbBatchAligner(searchScope[0], searchScope[2], searchScope[1], searchScope[3],
