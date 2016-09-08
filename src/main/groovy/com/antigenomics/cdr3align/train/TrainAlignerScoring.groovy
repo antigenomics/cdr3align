@@ -15,12 +15,11 @@ def sout = {
 }
 
 def DEFAULT_CONF_THRESHOLD = "1", DEFAULT_SPECIES = "HomoSapiens",
-    DEFAULT_GENES = "TRA,TRB", DEFAULT_MIN_CDR3_PER_AG = "2",
+    DEFAULT_GENES = "TRB", DEFAULT_MIN_CDR3_PER_AG = "5",
     DEFAULT_SCOPE = "5,2,2,7", DEFAULT_PATH = "vdjdb.slim.txt", DEFAULT_NEG_PATH = "cdr3align.neg.txt",
-    DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "1000",
+    DEFAULT_MOEA_POP_SIZE = "150", DEFAULT_MOEA_GEN = "5000",
     DEFAULT_POS_WEIGHT_LEN = "7",
     DEFAULT_THREADS = Runtime.getRuntime().availableProcessors().toString()
-
 
 def cli = new CliBuilder(usage: "TrainAlignerScoring [options] output_folder/")
 cli.h("display help message")
