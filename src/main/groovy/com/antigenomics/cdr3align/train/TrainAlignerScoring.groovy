@@ -82,7 +82,7 @@ def outputFolder = opt.arguments()[-1],
 
 sout "Loading database.."
 
-def records = new VdjdbLoader(vdjdbSlimPath).load(vdjdbConfThreshold, genes, species, minCdr3PerAg)
+def records = new VdjdbLoader(vdjdbSlimPath).load(vdjdbConfThreshold, genes, species, minCdr3PerAg) as List
 
 sout "Loaded ${records.size()} unique CDR3s."
 
