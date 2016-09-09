@@ -12,9 +12,13 @@ class RecordAlignmentPreFilter implements AlignmentPreFilter<Record> {
 
     @Override
     boolean canAlign(Record tcrData1, Record tcrData2) {
-        !tcrData1.antigen.empty && // filter alignments between two negative control records
-                tcrData1.gene == tcrData2.gene &&
+        tcrData1.gene == tcrData2.gene &&
                 (!matchV || tcrData1.vSegments.any { tcrData2.vSegments.contains(it) }) &&
                 (!matchJ || tcrData1.jSegments.any { tcrData2.jSegments.contains(it) })
+    }
+
+    @Override
+    boolean notDummy(Record tcrData) {
+        !tcrData.antigen.empty // negative control
     }
 }

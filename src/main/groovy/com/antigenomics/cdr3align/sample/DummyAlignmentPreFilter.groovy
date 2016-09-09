@@ -7,4 +7,9 @@ class DummyAlignmentPreFilter<T> implements AlignmentPreFilter<T> {
     boolean canAlign(T tcrData1, T tcrData2) {
         true
     }
+
+    @Override
+    boolean notDummy(T tcrData) {
+        true
+    }
 }

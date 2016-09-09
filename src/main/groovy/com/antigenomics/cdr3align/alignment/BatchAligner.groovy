@@ -42,7 +42,7 @@ class BatchAligner<T, R extends AlignmentWrapper<T>> {
         def counter = new AtomicInteger()
 
         GParsPool.withPool(threads) {
-            treeMap.values().eachParallel { T from ->
+            treeMap.values().findAll { alignmentPreFilter.notDummy(it) }.eachParallel { T from ->
                 def fromCdr3 = cdr3Provider.getCdr3Aa(from)
                 def iter = treeMap.getNeighborhoodIterator(fromCdr3, searchParameters)
                 def to

@@ -15,7 +15,7 @@ class ScoringProblem extends AbstractProblem {
     final Collection<RecordAlignment> alignments
     final int nPositionalWeights
 
-    static final float MAX_DIAG = 1.0f, MIN_NON_DIAG = -1.0f, MIN_GAP = -10.0f, VAR_FACTOR = 1000f,
+    static final float MAX_DIAG = 1.0f, MIN_NON_DIAG = -1.0f, MIN_GAP = -1.0f, VAR_FACTOR = 1000f,
                        SCORE_RANGE = 20f * Math.max(MAX_DIAG, Math.max(-MIN_NON_DIAG, -MIN_GAP))
 
     static final int N_SUBST = (int) (AminoAcidSequence.ALPHABET.size() * (AminoAcidSequence.ALPHABET.size() + 1) / 2),
