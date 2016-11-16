@@ -1,0 +1,107 @@
+---
+title: "VDJdb sandbox-1"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load data from Alexey, melt and remove Cys:
+
+```{r}
+library(reshape2)
+library(gplots)
+library(plyr)
+library(MASS)
+
+df <- read.csv("msubstitution_matrix_3_0_0_3_all.csv", stringsAsFactors = F)
+df <- melt(df)
+df$type <- "outer"
+
+df.1 <- read.csv("substitution_matrix_3_0_0_3_all.csv", stringsAsFactors = F)
+df.1 <- melt(df.1)
+df.1$type <- "inner"
+
+df <- rbind(df, df.1)
+
+colnames(df) <- c("from", "to", "count", "type")
+
+df <- subset(df, from != "C" & to != "C")
+```
+
+Here $C^{(s)}_{ij}$ and $C^{(d)}_{ij}$ amino acid substitution counts for CDR3 alignments with same ($s$) and distinct ($d$) antigens. $C^{(s,d)}_{ii}$ represents the number of times amino acid gets unchanged.
+
+Protect against $\log 0$
+
+$$
+C^{(s,d)}_{ij} \leftarrow C^{(s,d)}_{ij} + 1
+$$
+
+Probability of not changing amino acid
+
+$$
+P^{(s,d)}_{ii} = \frac{C^{(s,d)}_{ii}}{\sum_{k} C^{(s,d)}_{ik}}
+$$
+
+Probability of $i\rightarrow j, i \neq j$ is
+
+$$
+P^{(s,d)}_{ij} = (1 - P^{(s,d)}_{ii}) \frac{C^{(s,d)}_{ij}}{\sum_{k \neq i} C^{(s,d)}_{ik}}
+$$
+
+Symmetrize as follows
+
+$$
+P^{(s,d)}_{ij} = \frac{P^{(s,d)}_{ij}}{P^{(s,d)}_{ij} + P^{(s,d)}_{ji}} P^{(s,d)}_{ij} + \frac{P^{(s,d)}_{ji}}{P^{(s,d)}_{ij} + P^{(s,d)}_{ji}} P^{(s,d)}_{ji}
+$$
+
+Compute odds ratios as
+
+$$
+Q_{ij} = \log_{10} \frac{P^{(s)}_{ij}}{P^{(s)}_{ij}}
+$$
+
+Perform calculations, cluster amino acids based on substitution odds ratios
+
+```{R}
+df$count <- df$count + 1
+
+# Pii
+df <- ddply(df, .(from, type), transform,
+            P = count / sum(count))
+
+# Pij
+df <- ddply(df, .(from, type), transform,
+            P = ifelse(from == to, P, 
+                       (1 - P[which(from == to)]) * count / sum(count[which(from != to)])))
+
+df.inv <- data.frame(from = df$to, to = df$from, type = df$type, count = df$count, P = df$P)
+df <- merge(df, df.inv, by = c("from", "to", "type", "count"))
+df$P <- mapply(function(x, y) min(x, y), df$P.x, df$P.y)
+
+df.1 <- ddply(df, .(from, to), summarize, Q = log10(P[which(type=="inner")] / P[which(type=="outer")]))
+
+df.m <- dcast(df.1, from ~ to)
+rownames(df.m) <- df.m$from
+df.m$from <- NULL
+df.m <- data.matrix(df.m)
+
+df.m <- df.m[order(rownames(df.m)), order(colnames(df.m))]
+
+heatmap.2(df.m, scale="none", symm = T, trace = "none",
+          #hclustfun = function(x) hclust(dist(x), method = "ward"),
+          col=colorpanel(100, "#2166ac", "#f7f7f7", "#b2182b"))
+```
+
+Some MDS analysis
+
+```{R}
+# hydrophobic, neutral, hydrophilic
+colors <- c(rep("blue", 8), rep("red", 6), rep("yellow", 6))
+names(colors) <- strsplit("I V L F C M A W G T S Y P H N D Q E K R", " ")[[1]]
+
+df.mds <- isoMDS(as.dist(-df.m + 2), k = 2)
+plot(df.mds$points, type = "n")
+text(df.mds$points, labels = rownames(df.m), col = colors[rownames(df.m)])
+```
