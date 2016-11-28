@@ -48,6 +48,7 @@ public class AlignCdrAux {
 
         String header =
                 "same.ag\tcdr3.len\tweight\t" +
+                        "align.id\talign.sub.id\t" +
                         "subst\tins\tdel\t" +
                         "mut.type\tmut.pos\tmut.from\tmut.to";
 
@@ -70,7 +71,8 @@ public class AlignCdrAux {
             });
             writeThread.start();
 
-            final AtomicInteger counter = new AtomicInteger(), mutationCounter = new AtomicInteger();
+            final AtomicInteger counter = new AtomicInteger(), mutationCounter = new AtomicInteger(),
+                    alignmentIdCounter = new AtomicInteger();
 
             cdr3AntigenMap.values().parallelStream().forEach(thisCdr3Info -> {
                         Cdr3Info otherCdr3Info;
@@ -97,12 +99,15 @@ public class AlignCdrAux {
 
                         for (List<AlignmentInfo> alignmentInfos : alignmentVariants.values()) {
                             float weight = 1.0f / alignmentInfos.size();
+                            int alignmentId = alignmentIdCounter.incrementAndGet(),
+                                    alignmentSubId = 0;
 
                             for (AlignmentInfo alignmentInfo : alignmentInfos) {
                                 Alignment alignment = alignmentInfo.alignment;
 
                                 String prefix = (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
-                                        alignment.getSequence1().size() + "\t" + weight + "\t";
+                                        alignment.getSequence1().size() + "\t" + weight + "\t" +
+                                        alignmentId + "\t" + (alignmentSubId++) + "\t";
 
                                 Mutations mutations = alignment.getAbsoluteMutations();
 
