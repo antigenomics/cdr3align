@@ -43,9 +43,10 @@ public class AlignCdrAux {
 
         cdr3AntigenMap.entrySet().forEach(kvp -> stm.put(kvp.getKey(), kvp.getValue()));
 
-        String header = "substs\tindels\t" +
+        String header =
                 "same.ag\tcdr3.len\tweight\t" +
-                "mut.type\tmut.pos\tmut.from\tmut.to";
+                        "subst\tins\tdel\t" +
+                        "mut.type\tmut.pos\tmut.from\tmut.to";
 
 
         PrintWriter pw = new PrintWriter(new File(outputFileName));
@@ -55,7 +56,6 @@ public class AlignCdrAux {
         for (int i = 0; i <= maxSubstitutions; i++) {
             for (int j = 0; j <= maxIndels; j++) {
                 TreeSearchParameters tsp = new TreeSearchParameters(i, j, j);
-                String paramString = i + "\t" + j + "\t";
 
                 Queue<String> lines = new ConcurrentLinkedQueue<>();
 
@@ -94,10 +94,28 @@ public class AlignCdrAux {
                                 for (AlignmentInfo alignmentInfo : alignmentInfos) {
                                     Alignment alignment = alignmentInfo.alignment;
 
-                                    String prefix = paramString + (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
+                                    String prefix = (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
                                             alignment.getSequence1().size() + "\t" + weight + "\t";
 
                                     Mutations mutations = alignment.getAbsoluteMutations();
+
+                                    int subst = 0, ins = 0, del = 0;
+
+                                    for (int k = 0; k < mutations.size(); k++) {
+                                        switch (mutations.getTypeByIndex(k)) {
+                                            case Substitution:
+                                                subst++;
+                                                break;
+                                            case Insertion:
+                                                ins++;
+                                                break;
+                                            case Deletion:
+                                                del++;
+                                                break;
+                                        }
+                                    }
+
+                                    prefix += subst + "\t" + ins + "\t" + del + "\t";
 
                                     for (int k = 0; k < mutations.size(); k++) {
                                         MutationType mutationType = mutations.getTypeByIndex(k);
@@ -106,9 +124,9 @@ public class AlignCdrAux {
                                                 shortMutationType(mutationType) + "\t" +
                                                 mutations.getPositionByIndex(k) + "\t" +
                                                 (mutationType == MutationType.Insertion ?
-                                                        mutations.getFromAsSymbolByIndex(k) : "-") + "\t" +
+                                                        "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
                                                 (mutationType == MutationType.Deletion ?
-                                                        mutations.getToAsSymbolByIndex(k) : "-")
+                                                        "-" : mutations.getToAsSymbolByIndex(k))
                                         );
 
                                         mCount = mutationCounter.incrementAndGet();
@@ -119,7 +137,7 @@ public class AlignCdrAux {
                             int count = counter.incrementAndGet();
 
                             if (count % 100 == 0) {
-                                System.out.println("[" + (new Date()) + "] substs=" + ii + " indels=" + jj +
+                                System.out.println("[" + (new Date()) + "] subst=" + ii + " indel=" + jj +
                                         " queried " + count + " of " + cdr3AntigenMap.size() + " cdr3 sequences. " +
                                         "Recorded " + mCount + " mutations so far.");
                             }
