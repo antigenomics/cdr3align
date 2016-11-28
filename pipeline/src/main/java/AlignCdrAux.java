@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -22,7 +23,7 @@ public class AlignCdrAux {
 
         String inputFileName = args[2], outputFileName = args[3];
 
-        Map<AminoAcidSequence, Cdr3Info> cdr3AntigenMap = new HashMap<>();
+        final Map<AminoAcidSequence, Cdr3Info> cdr3AntigenMap = new HashMap<>();
         try (Stream<String> stream = Files.lines(new File(inputFileName).toPath())) {
             stream.forEach(line -> {
                 String[] splitString = line.split("\t");
@@ -39,9 +40,11 @@ public class AlignCdrAux {
 
         System.out.println("Loaded " + cdr3AntigenMap.size() + " cdr3 sequences.");
 
-        SequenceTreeMap<AminoAcidSequence, Cdr3Info> stm = new SequenceTreeMap<>(AminoAcidSequence.ALPHABET);
+        final SequenceTreeMap<AminoAcidSequence, Cdr3Info> stm = new SequenceTreeMap<>(AminoAcidSequence.ALPHABET);
 
         cdr3AntigenMap.entrySet().forEach(kvp -> stm.put(kvp.getKey(), kvp.getValue()));
+
+        final TreeSearchParameters tsp = new TreeSearchParameters(maxSubstitutions, maxIndels, maxIndels);
 
         String header =
                 "same.ag\tcdr3.len\tweight\t" +
@@ -49,106 +52,115 @@ public class AlignCdrAux {
                         "mut.type\tmut.pos\tmut.from\tmut.to";
 
 
-        PrintWriter pw = new PrintWriter(new File(outputFileName));
+        try (final PrintWriter pw = new PrintWriter(new File(outputFileName))) {
+            pw.println(header);
 
-        pw.println(header);
+            final Queue<String> lines = new ConcurrentLinkedQueue<>();
 
-        for (int i = 0; i <= maxSubstitutions; i++) {
-            for (int j = 0; j <= maxIndels; j++) {
-                TreeSearchParameters tsp = new TreeSearchParameters(i, j, j);
+            Thread writeThread = new Thread(() -> {
+                while (true) {
+                    String value;
+                    while ((value = lines.poll()) != null) {
+                        if (value.equals("END")) {
+                            return;
+                        }
+                        pw.println(value);
+                    }
+                }
+            });
+            writeThread.start();
 
-                Queue<String> lines = new ConcurrentLinkedQueue<>();
+            final AtomicInteger counter = new AtomicInteger(), mutationCounter = new AtomicInteger();
 
-                AtomicInteger counter = new AtomicInteger(), mutationCounter = new AtomicInteger();
+            cdr3AntigenMap.values().parallelStream().forEach(thisCdr3Info -> {
+                        Cdr3Info otherCdr3Info;
+                        NeighborhoodIterator iter = stm.getNeighborhoodIterator(thisCdr3Info.cdr3, tsp);
 
-                int ii = i;
-                int jj = j;
-                cdr3AntigenMap.values().parallelStream().forEach(thisCdr3Info -> {
-                            Cdr3Info otherCdr3Info;
-                            NeighborhoodIterator iter = stm.getNeighborhoodIterator(thisCdr3Info.cdr3, tsp);
+                        Map<AminoAcidSequence, List<AlignmentInfo>> alignmentVariants = new HashMap<>();
 
-                            Map<AminoAcidSequence, List<AlignmentInfo>> alignmentVariants = new HashMap<>();
+                        while ((otherCdr3Info = (Cdr3Info) iter.next()) != null) {
+                            if (thisCdr3Info.nonDuplicateComparison(otherCdr3Info)) {
+                                final AlignmentInfo alignmentInfo = new AlignmentInfo(
+                                        thisCdr3Info.antigensOverlap(otherCdr3Info),
+                                        iter.getCurrentAlignment());
 
-                            while ((otherCdr3Info = (Cdr3Info) iter.next()) != null) {
-                                if (thisCdr3Info.nonDuplicateComparison(otherCdr3Info)) {
-                                    AlignmentInfo alignmentInfo = new AlignmentInfo(
-                                            thisCdr3Info.antigensOverlap(otherCdr3Info),
-                                            iter.getCurrentAlignment());
-
-                                    alignmentVariants.compute(otherCdr3Info.cdr3,
-                                            (cdr3, alignments) -> {
-                                                if (alignments == null) {
-                                                    alignments = new ArrayList<>();
-                                                }
-                                                alignments.add(alignmentInfo);
-                                                return alignments;
-                                            });
-                                }
-                            }
-
-                            int mCount = 0;
-
-                            for (List<AlignmentInfo> alignmentInfos : alignmentVariants.values()) {
-                                float weight = 1.0f / alignmentInfos.size();
-
-                                for (AlignmentInfo alignmentInfo : alignmentInfos) {
-                                    Alignment alignment = alignmentInfo.alignment;
-
-                                    String prefix = (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
-                                            alignment.getSequence1().size() + "\t" + weight + "\t";
-
-                                    Mutations mutations = alignment.getAbsoluteMutations();
-
-                                    int subst = 0, ins = 0, del = 0;
-
-                                    for (int k = 0; k < mutations.size(); k++) {
-                                        switch (mutations.getTypeByIndex(k)) {
-                                            case Substitution:
-                                                subst++;
-                                                break;
-                                            case Insertion:
-                                                ins++;
-                                                break;
-                                            case Deletion:
-                                                del++;
-                                                break;
-                                        }
-                                    }
-
-                                    prefix += subst + "\t" + ins + "\t" + del + "\t";
-
-                                    for (int k = 0; k < mutations.size(); k++) {
-                                        MutationType mutationType = mutations.getTypeByIndex(k);
-
-                                        lines.add(prefix +
-                                                shortMutationType(mutationType) + "\t" +
-                                                mutations.getPositionByIndex(k) + "\t" +
-                                                (mutationType == MutationType.Insertion ?
-                                                        "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
-                                                (mutationType == MutationType.Deletion ?
-                                                        "-" : mutations.getToAsSymbolByIndex(k))
-                                        );
-
-                                        mCount = mutationCounter.incrementAndGet();
-                                    }
-                                }
-                            }
-
-                            int count = counter.incrementAndGet();
-
-                            if (count % 100 == 0) {
-                                System.out.println("[" + (new Date()) + "] subst=" + ii + " indel=" + jj +
-                                        " queried " + count + " of " + cdr3AntigenMap.size() + " cdr3 sequences. " +
-                                        "Recorded " + mCount + " mutations so far.");
+                                alignmentVariants.compute(otherCdr3Info.cdr3,
+                                        (cdr3, alignments) -> {
+                                            if (alignments == null) {
+                                                alignments = new ArrayList<>();
+                                            }
+                                            alignments.add(alignmentInfo);
+                                            return alignments;
+                                        });
                             }
                         }
-                );
 
-                lines.forEach(pw::println);
-            }
+                        for (List<AlignmentInfo> alignmentInfos : alignmentVariants.values()) {
+                            float weight = 1.0f / alignmentInfos.size();
+
+                            for (AlignmentInfo alignmentInfo : alignmentInfos) {
+                                Alignment alignment = alignmentInfo.alignment;
+
+                                String prefix = (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
+                                        alignment.getSequence1().size() + "\t" + weight + "\t";
+
+                                Mutations mutations = alignment.getAbsoluteMutations();
+
+                                int subst = 0, ins = 0, del = 0;
+
+                                for (int k = 0; k < mutations.size(); k++) {
+                                    switch (mutations.getTypeByIndex(k)) {
+                                        case Substitution:
+                                            subst++;
+                                            break;
+                                        case Insertion:
+                                            ins++;
+                                            break;
+                                        case Deletion:
+                                            del++;
+                                            break;
+                                    }
+                                }
+
+                                prefix += subst + "\t" + ins + "\t" + del + "\t";
+
+                                for (int k = 0; k < mutations.size(); k++) {
+                                    MutationType mutationType = mutations.getTypeByIndex(k);
+
+                                    lines.add(prefix +
+                                            shortMutationType(mutationType) + "\t" +
+                                            mutations.getPositionByIndex(k) + "\t" +
+                                            (mutationType == MutationType.Insertion ?
+                                                    "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
+                                            (mutationType == MutationType.Deletion ?
+                                                    "-" : mutations.getToAsSymbolByIndex(k))
+                                    );
+
+                                    mutationCounter.incrementAndGet();
+                                }
+                            }
+                        }
+
+                        int count = counter.incrementAndGet();
+
+                        if (count % 100 == 0) {
+                            System.out.println("[" + (new Date()) + "] " +
+                                    "Queried " + count + " of " + cdr3AntigenMap.size() + " cdr3 sequences. " +
+                                    "Recorded ~" + mutationCounter.get() + " mutations so far.");
+                        }
+                    }
+            );
+
+            lines.add("END");
+
+            writeThread.join();
+
+            System.out.println("[" + (new Date()) + "] " +
+                    "Done. Queried " + cdr3AntigenMap.size() + " cdr3 sequences. " +
+                    "Recorded " + mutationCounter.get() + " mutations.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-        pw.close();
     }
 
     private static class Cdr3Info {
