@@ -2,3 +2,5 @@
 build/
 *.iml
 .gradle/
+target/
+dependency-reduced-pom.xml
