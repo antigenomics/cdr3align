@@ -412,11 +412,6 @@ def get_alignments(infname):
                     pass
                 else:
                     alignments[oseq + '|' + tseq].append([algn[0], algn[1]])
-            elif tseq + '|' + oseq in alignments:
-                if [algn[1], algn[0]] in alignments[tseq + '|' + oseq]:
-                    pass
-                else:
-                    alignments[tseq + '|' + oseq].append([algn[1], algn[0]])
             else:
                 alignments[oseq + '|' + tseq] = [[algn[0], algn[1]]]
     return alignments
