@@ -49,11 +49,12 @@ if myargs.use_all == 'y':
         ch_w.get_occurence_matrix(occurence, alignments, substitutions, msubstitutions, antig_seq=sequences_with_antigen,
                                name=i.split('/')[-1], folder=myargs.output_dir)
 else:
-    alignments = ch_w.get_alignments(myargs.input_dir)
-    substitutions = pd.DataFrame(0, index=sorted(occurence), columns=sorted(occurence))
-    msubstitutions = pd.DataFrame(0, index=sorted(occurence), columns=sorted(occurence))
-    ch_w.get_occurence_matrix(occurence, alignments, substitutions, msubstitutions, antig_seq=sequences_with_antigen,
-                              name=myargs.input_dir.split('/')[-1], folder=myargs.output_dir)
+    for i in myargs.input_dir:
+        alignments = ch_w.get_alignments(i)
+        substitutions = pd.DataFrame(0, index=sorted(occurence), columns=sorted(occurence))
+        msubstitutions = pd.DataFrame(0, index=sorted(occurence), columns=sorted(occurence))
+        ch_w.get_occurence_matrix(occurence, alignments, substitutions, msubstitutions, antig_seq=sequences_with_antigen,
+                                  name=i.split('/')[-1], folder=myargs.output_dir)
 
 if myargs.q == 'y':
     print("We are sorry, right now this script can't do anything more.")
