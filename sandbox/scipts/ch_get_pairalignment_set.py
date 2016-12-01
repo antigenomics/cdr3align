@@ -28,7 +28,6 @@ if myargs.use_all == 'y':
     ch_w.get_alignments_set(myargs.work_dir, files, myargs.output_dir)
 else:
     algn = set()
-    print(myargs.input_dir)
     for i in myargs.input_dir:
         with open(i, 'r') as inp:
             for line in inp:
