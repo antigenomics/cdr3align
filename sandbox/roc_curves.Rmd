@@ -1,0 +1,68 @@
+
+---
+title: "ch VDJdb sandbox. ROC curves"
+header-includes:
+- \usepackage{amsmath,amsthm,amssymb}
+- \usepackage{mathtext}
+- \usepackage[T1,T2A]{fontenc}
+- \usepackage[utf8]{inputenc}
+- \usepackage[english,russian]{babel}
+output: 
+  pdf_document:
+    keep_tex: yes
+    latex_engine: xelatex
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Here $Q_{k_{i}m_{j}}$ is Q-score for amino acid substitution in aligned sequences $k$ and $m$ at $i$ and $j$  positions respectively. $Q_{k_{i}m_{j}}$ represents $log_{10}$ of odds ratios for probabilities to see substitution of amino acid in same and distinct antigens. lengths of $k$ and $m$ sequences are similar and are equal to $N$.
+
+To get the weight of an alignment we sum those Q-scores as follows:
+$$S_{km} = \sum_{i=1}^N Q_{k_{i}m_{i}}$$
+
+To find probability of sequences $k$ and $m$ to bind same epitope maximum and minimum weighted alignments were found for sequences $k$ and $m$ with condition to not look for maximum (minimum) weighted substitution in positions where $k$ and $m$ are similar:
+
+$$S_{(k,m)\max} = \sum_{i=1}^N Q_{(k,m)_{i}n_{i}},$$
+
+where $n_{i}$ = $(k,m)_{i}$, if $k_{i}$=$m_{i}$, or $n_{i}$ = $\underset{x \in aminoacids}{argmax}Q_{(k,m)_{i}x}$ if $k_{i} \neq m_{i}$
+
+$$S_{(k,m)\min} = \sum_{i=1}^N Q_{(k,m)_{i}n_{i}},$$
+
+where $n_{i}$ = $(k,m)_{i}$, if $k_{i}$=$m_{i}$, or $n_{i}$ = $\underset{x \in aminoacids}{argmin}Q_{(k,m)_{i}x}$ if $k_{i} \neq m_{i}$
+
+The probability of sequences $k$ and $m$ to bind same epitope are:
+
+$$P((k \& m) \in same epitope ) = \frac{S_{km} - S_{k\min}}{2(S_{k\max}-S_{k\min})} + \frac{S_{km} - S_{m\min}}{2(S_{m\max}-S_{m\min})}.$$
+
+Those probabilities were computed by using script "ch_roc_curves.py". If somehow either $S_{m}\max = S_{m}\min$ or $S_{k}\max = S_{k}\min$ then those alignments were omitted (Didn't see any, though).
+Files with probabilites are in folder "seqdata/HomoSapiens/scores/".
+
+Load data from folder:
+
+```{r}
+library(pROC)
+
+read_file_for_ROC <- function(folder, sub, del, ins, tot, name) {
+  suffix <- paste(sub, del, ins, tot, sep="_")
+  inpname <- paste(paste(name, suffix, sep="_"), '.txt', sep='')
+  df <- read.csv(paste(folder, inpname, sep =""), sep = '\t', stringsAsFactors = F)
+  colnames(df) <- c("sameantigen", "score", "pair")
+  df$dataset <- suffix
+  return(df)
+}
+
+folder <- "seqdata/HomoSapiens/scores/"
+par(mfrow=c(2,3))
+for (s in 1:6) {
+  df <- read_file_for_ROC(folder, s, 0, 0, s, 'pairscores')
+  dfroc <- roc(sameantigen ~ score, df)
+  print(paste(s,0,0,s,sep='_'))
+  print(dfroc)
+  print('-----------------')
+  plot(dfroc, main=paste(s,0,0,s,sep='_'))
+}
+
+
+
+```
