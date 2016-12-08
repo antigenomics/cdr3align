@@ -16,29 +16,24 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Here $Q_{k_{i}m_{j}}$ is Q-score for amino acid substitution in aligned sequences $k$ and $m$ at $i$ and $j$  positions respectively. $Q_{k_{i}m_{j}}$ represents $log_{10}$ of odds ratios for probabilities to see substitution of amino acid in same and distinct antigens. lengths of $k$ and $m$ sequences are similar and are equal to $N$.
+Here $Q_{k_{i}m_{j}}$ is Q-score for amino acid substitution in aligned sequences $k$ and $m$ at $i$ and $j$  positions respectively. $Q_{k_{i}m_{j}}$ represents $log_{10}$ of odds ratios for probabilities to see substitution of amino acid in same and distinct antigens. lengths of sequences $k$ and $m$ are similar and are equal to $N$. No indels allowed.
 
 To get the weight of an alignment we sum those Q-scores as follows:
 $$S_{km} = \sum_{i=1}^N Q_{k_{i}m_{i}}$$
 
-To find probability of sequences $k$ and $m$ to bind same epitope maximum and minimum weighted alignments were found for sequences $k$ and $m$ with condition to not look for maximum (minimum) weighted substitution in positions where $k$ and $m$ are similar:
+To compute predicted value for sequences $k$ and $m$ to bind same epitope weight of an alignment was divided by it's length $N_{km}$:
 
-$$S_{(k,m)\max} = \sum_{i=1}^N Q_{(k,m)_{i}n_{i}},$$
+$$W_{km} = \frac{S_{km}}{N_{km}}$$
 
-where $n_{i}$ = $(k,m)_{i}$, if $k_{i}$=$m_{i}$, or $n_{i}$ = $\underset{x \in aminoacids}{argmax}Q_{(k,m)_{i}x}$ if $k_{i} \neq m_{i}$
+Those values were computed using script "ch_roc_curves.py".
 
-$$S_{(k,m)\min} = \sum_{i=1}^N Q_{(k,m)_{i}n_{i}},$$
+Files with values are in folder "seqdata/HomoSapiens/scores/".
+Scripts are in folder "scripts/".
 
-where $n_{i}$ = $(k,m)_{i}$, if $k_{i}$=$m_{i}$, or $n_{i}$ = $\underset{x \in aminoacids}{argmin}Q_{(k,m)_{i}x}$ if $k_{i} \neq m_{i}$
+Point to note:
+Cysteines were omitted while lengths and weights were calculatedю
 
-The probability of sequences $k$ and $m$ to bind same epitope are:
-
-$$P((k \& m) \in same epitope ) = \frac{S_{km} - S_{k\min}}{2(S_{k\max}-S_{k\min})} + \frac{S_{km} - S_{m\min}}{2(S_{m\max}-S_{m\min})}.$$
-
-Those probabilities were computed by using script "ch_roc_curves.py". If somehow either $S_{m}\max = S_{m}\min$ or $S_{k}\max = S_{k}\min$ then those alignments were omitted (Didn't see any, though).
-Files with probabilites are in folder "seqdata/HomoSapiens/scores/".
-
-Load data from folder:
+Load data from folder and calculate ROC curves:
 
 ```{r}
 library(pROC)
