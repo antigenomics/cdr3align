@@ -62,20 +62,6 @@ def pair_alignment_to_scores(inppath, dataset, antig_seq, wrkdir, outname):
                         raise Found
             except Found:
                 sameantig = 1
-            summaxscore1, summaxscore2 = 0, 0
-            summinscore1, summinscore2 = 0, 0
-            for i in range(len(p1)):
-                if p1[i] != 'C' and p2[i] != 'C':
-                    if p1[i] != p2[i]:
-                        summaxscore1 += dataset['maxscore'][p1[i]]['score']
-                        summaxscore2 += dataset['maxscore'][p2[i]]['score']
-                        summinscore1 += dataset['minscore'][p1[i]]['score']
-                        summinscore2 += dataset['minscore'][p2[i]]['score']
-                    else:
-                        summaxscore1 += dataset['matrix'][p1[i]][p2[i]]
-                        summaxscore2 += dataset['matrix'][p1[i]][p2[i]]
-                        summinscore1 += dataset['matrix'][p1[i]][p2[i]]
-                        summinscore2 += dataset['matrix'][p1[i]][p2[i]]
             for pair in alignments[pairset]:
                 iti = 0
                 upscore = 0
@@ -86,18 +72,10 @@ def pair_alignment_to_scores(inppath, dataset, antig_seq, wrkdir, outname):
                     else:
                         iti += 1
                         upscore += dataset['matrix'][pair[0][i]][pair[1][i]]
-                equals = 0
-                if(summaxscore1 == summinscore1 or summaxscore2 == summinscore2):
-                    equals += 1
-                    pass
-                else:
-                    if equals > 0:
-                        print(equals)
-                    out.write(str(sameantig)+'\t'+str((((upscore-summinscore1)/(summaxscore1-summinscore1))+((upscore-summinscore2)/(summaxscore2-summinscore2)))/2) + '\t' + pair[0] + ' ' + pair[1] + '\n')
-
+                out.write(str(sameantig) + '\t' + str(upscore/iti) + '\t' + pair[0] + ' ' + pair[1] + '\n')
 '''
 sequences_with_antigen = ch_w.get_sequences_with_antigen('seqdata/HomoSapiens/trb_sequences_HomoSapiens_teach_antigen')
-scores = read_scores('scores.txt')
+scores = read_scores('scores_modified.txt')
 
 for dataset in scores:
     pair_alignment_to_scores('seqdata/HomoSapiens/sub_no_del_or_ins/out_teach_'+str(dataset),
