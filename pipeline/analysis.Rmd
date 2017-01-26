@@ -1,0 +1,233 @@
+---
+title: "Substitution patterns"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Data and general stats
+
+Libraries & load data
+
+```{r}
+library(dplyr)
+library(pROC)
+library(ggplot2)
+library(reshape2)
+library(ggbeeswarm)
+
+df <- read.table("mutations.txt.gz", header=T, sep="\t")
+df$same.ag <- df$same.ag > 0
+
+head(df)
+```
+
+
+Number of substitutions for same/different antigen by region
+
+```{r}
+df.summary <- df %>%
+  group_by(align.id, mut.region, same.ag) %>%
+  summarize(match = sum(mut.from == mut.to), mismatch = sum(mut.from != mut.to))
+
+ggplot(df.summary, aes(x = mismatch, color=same.ag)) +
+  geom_freqpoly(aes(y=..density..), binwidth = 1) +
+  facet_grid(. ~ mut.region) +
+  scale_x_continuous(limits=c(0, 3), breaks=0:3) +
+  scale_color_brewer(palette = "Set1") +
+  theme_bw()
+```
+
+### Substitution matrix
+
+```{r}
+compute_prob <- function(mut.from, mut.to, count) {
+  .df <- data.frame(mut.from, mut.to, count)
+  
+  .mat <- dcast(.df, 
+                mut.from ~ mut.to, value.var = "count", 
+                fun.aggregate = sum)
+  rownames(.mat) <- .mat$mut.from
+  .mat$mut.from <- NULL
+  .mat <- as.matrix(.mat)
+  
+  rs <- rowSums(.mat)
+  p0 <- diag(.mat) / rs
+  
+  .mat <- .mat / (rs - diag(.mat)) * p0 # subst prob
+  diag(.mat) <- p0 #match prob
+  
+  .mat <- (.mat ^ 2 + t(.mat) ^ 2) / (.mat + t(.mat)) # symm
+  
+  merge(.df, melt(.mat,varnames = c("mut.from", "mut.to")))$value
+}
+
+df.s <- df %>% 
+  filter(ins == 0 & del == 0) %>% 
+  dplyr::select(same.ag, mut.region, mut.from, mut.to, align.id, gene)
+
+df.ss <- df.s
+df.ss$mut.from <- df.s$mut.to
+df.ss$mut.to <- df.s$mut.from
+df.ss <- rbind(df.s, df.ss) 
+
+df.ss2 <- df.ss
+df.ss2$mut.region <- "Any"
+
+df.ss <- rbind(df.ss, df.ss2)
+
+df.ss <- df.ss %>% 
+  group_by(same.ag, mut.region, mut.from, mut.to) %>% 
+  summarise(count = n()) %>%
+  droplevels() %>%
+  group_by(same.ag, mut.region) %>% 
+  mutate(P = compute_prob(mut.from, mut.to, count)) %>%
+  group_by(mut.region, mut.from, mut.to) %>% 
+  summarise(Q = ifelse(n() == 2, log10(P[same.ag] / P[!same.ag]), NA))
+
+df.ss$mut.region <- factor(df.ss$mut.region, levels = c("V", "N", "J", "Any"))
+
+head(df.ss)
+```
+
+Substitution matrix
+
+```{r}
+ggplot(df.ss, aes(x=mut.from, y=mut.to, fill = Q)) + geom_tile() + facet_grid(~mut.region) +
+  scale_fill_gradient2(midpoint = 0, low = "#5e4fa2", mid = "#ffffbf", high = "#9e0142", 
+                       na.value = "white", limits = c(-1.5,1.5)) + 
+  theme_bw() + theme(panel.background = element_rect(fill = "white"),
+                     panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+```
+
+Replacement-conservation score contrast.
+
+```{r}
+df.ss1 = df.ss
+df.ss1$replacement = ifelse(df.ss1$mut.from != df.ss1$mut.to, "replace", "conserve")
+
+ggplot(df.ss1, aes(x = Q, group=mut.region, color=mut.region)) + 
+  stat_ecdf(aes(linetype = mut.region == "Any")) + 
+  scale_color_brewer(palette = "Set1") +
+  scale_x_continuous(limits=c(-2,2))+
+  facet_wrap(~replacement) +
+  theme_bw()
+```
+
+Strong amino acids are less likely to be replaced
+
+```{r}
+df.ss.1 <- subset(df.ss, mut.from == mut.to)
+
+# Useful faceted axis reordering magick
+df.ss.1$strong <- df.ss.1$mut.from %in% c("F", "I", "L", "M", "V", "W", "Y")
+df.ss.1$lbl.ds <- paste(df.ss.1$mut.from, df.ss.1$mut.region, sep = ".")
+df.ss.1$lbl.ds <- reorder(df.ss.1$lbl.ds, df.ss.1$Q)
+
+ggplot(df.ss.1, aes(x = lbl.ds, y = Q, fill=strong)) + 
+  geom_bar(stat="identity") + 
+  scale_fill_manual(values = c("black", "red")) +
+  facet_wrap(~mut.region, scales="free_x") +
+  scale_x_discrete(labels=function(x) sapply(strsplit(x,"[.]"),"[",1)) +
+  theme_bw()
+
+summary(aov(Q ~ mut.region + strong, df.ss.1))
+```
+
+### Comparison with BLOSUM62
+
+```{r}
+df.bl62 <- read.table("blosum62.txt", header = T)
+
+df.bl62 <- subset(df.bl62, tmp != "*" & tmp != "X")
+rownames(df.bl62) <- df.bl62[,1]
+df.bl62[,1] <- NULL
+df.bl62[,(ncol(df.bl62)-1):ncol(df.bl62)]  <- NULL
+
+df.bl62 <- data.frame(mut.from=rep(row.names(df.bl62),ncol(df.bl62)),
+                mut.to=rep(colnames(df.bl62),each=nrow(df.bl62)),
+                score=unlist(c(df.bl62)))
+
+df.bl62 <- merge(subset(df.ss, mut.region == "Any"), df.bl62)
+df.bl62$type <- with(df.bl62, ifelse(mut.from == mut.to, "conserve", "replace"))
+df.bl62 <- subset(df.bl62, as.integer(mut.from) <= as.integer(mut.to))
+df.bl62$Q[is.na(df.bl62$Q)] <- 0
+
+ggplot(df.bl62, aes(x = score, group = score, y = Q)) +
+  geom_boxplot() +
+  geom_beeswarm() +
+  ylab("Q score") +
+  scale_x_continuous("BLOSUM62 score", breaks=-20:20) +
+  facet_wrap(~type, scales = "free_x") + 
+  theme_bw()
+
+summary(aov(Q ~ score, df.bl62))
+```
+
+### Classifier performance
+
+Aux 
+
+```{r}
+df.scoring <- df.s
+
+df.scoring <- merge(df.scoring, df.ss) %>%
+  group_by(align.id, gene, same.ag) %>%
+  summarise(score = sum(Q, na.rm=T))
+
+df.scoring$matrix.type <- "by-region"
+
+df.scoring2 <- df.s
+df.scoring2$mut.region <- NULL
+df.ss2 <- subset(df.ss1, mut.region == "Any")
+
+df.scoring2 <- merge(df.scoring2, df.ss2) %>%
+  group_by(align.id, gene, same.ag) %>%
+  summarise(score = sum(Q, na.rm=T))
+
+df.scoring2$matrix.type <- "all-regions"
+
+df.scoring <- rbind(df.scoring, df.scoring2)
+
+# Compute ROCs
+
+df.scoring.roc <- data.frame()
+
+roc2df <- function(gene, mattype, rocobj) {
+  print(gene)
+  print(mattype)
+  print(rocobj)
+  
+  with(rocobj, data.frame(gene = gene,
+                          mattype = mattype,
+                          sens = sensitivities,
+                          spec = specificities,
+                          auc = auc[1]))
+}
+
+for (i in unique(df.scoring$gene)) {
+  for (j in unique(df.scoring$matrix.type)) {
+    df.scoring.roc <- rbind(df.scoring.roc,
+                          roc2df(i, j, roc(same.ag ~ score, subset(df.scoring, gene == i & matrix.type == j))))
+  }
+}
+
+df.scoring.roc <- rbind(df.scoring.roc,
+                        roc2df("Any", "by-region", roc(same.ag ~ score, subset(df.scoring, matrix.type == "by-region"))))
+df.scoring.roc <- rbind(df.scoring.roc,
+                        roc2df("Any", "all-regions", roc(same.ag ~ score, subset(df.scoring, matrix.type == "all-regions"))))
+```
+
+No difference between by-region and all-region matrices
+
+```{r}
+ggplot(df.scoring.roc, aes(x=spec, y=sens)) +
+  geom_abline(slope = 1, intercept = 1, linetype = "dashed") +
+  geom_line(color="red") +
+  facet_grid(mattype~gene) +
+  scale_x_reverse() +
+  theme_bw()
+```
+
