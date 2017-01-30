@@ -1,0 +1,327 @@
+---
+title: "Computing the substitution matrix for CDR3 amino acid sequence matching"
+output:
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Data and general stats
+
+Libraries & load data
+
+```{r}
+set.seed(51103)
+
+library(MASS)
+library(dplyr)
+library(pROC)
+library(ggplot2)
+library(reshape2)
+library(ggbeeswarm)
+library(gplots)
+library(RColorBrewer)
+select = dplyr::select
+
+df = read.table("mutations.txt.gz", header=T, sep="\t") %>%
+  select(same.ag, align.id, mut.type, mut.from, mut.to, mut.region, gene)
+df$same.ag = df$same.ag > 0
+
+head(df)
+
+summary(df)
+```
+
+```{r}
+n = 50
+df.bs = sample_n(df, nrow(df) * n, replace=T)
+df.bs$bs = rep(1:n, each = nrow(df))
+```
+
+Number of substitutions for same/different antigen by region
+
+```{r}
+df.bs$match = df.bs$mut.from == df.bs$mut.to
+
+df.summary = df.bs %>%
+  group_by(bs, align.id, mut.region, same.ag) %>%
+  summarize(match = sum(match), mismatch = n() - match)
+```
+
+```{r}
+df.summary$mut.region <- factor(df.summary$mut.region, levels = c("V", "N", "J"))
+
+ggplot(df.summary, aes(x = mismatch, group = interaction(bs,same.ag), color=same.ag)) +
+  geom_freqpoly(aes(y=..density..), binwidth = 1, alpha=0.3) +
+  facet_grid(. ~ mut.region) +
+  scale_x_continuous(limits=c(0, 3), breaks=0:3) +
+  scale_color_brewer(palette = "Set1") +
+  theme_bw()
+```
+
+### Substitution matrix
+
+Computing substitution matrix for bootstrapped samples
+
+```{r}
+compute_prob = function(mut.from, mut.to, count) {
+  .df = data.frame(mut.from, mut.to, count)
+  
+  .mat = dcast(.df, 
+                mut.from ~ mut.to, value.var = "count", 
+                fun.aggregate = sum)
+  rownames(.mat) = .mat$mut.from
+  .mat$mut.from = NULL
+  .mat = as.matrix(.mat)
+  
+  rs = rowSums(.mat)
+  p0 = diag(.mat) / rs
+  
+  .mat = .mat / (rs - diag(.mat)) * p0 # subst prob
+  diag(.mat) = p0 #match prob
+  
+  .mat = (.mat ^ 2 + t(.mat) ^ 2) / (.mat + t(.mat)) # symmetrize #2
+  
+  merge(.df, melt(.mat,varnames = c("mut.from", "mut.to")))$value
+}
+
+df.ss = df.bs
+df.ss$mut.from = df.bs$mut.to
+df.ss$mut.to = df.bs$mut.from
+df.ss = rbind(df.bs, df.ss)
+
+df.ss2 = df.ss
+df.ss2$mut.region <- "Any"
+
+df.ss = rbind(df.ss, df.ss2)
+
+df.ss = df.ss %>% 
+  group_by(bs, same.ag, mut.region, mut.from, mut.to) %>% 
+  summarise(count = n()) %>%
+  droplevels() %>%
+  group_by(bs, same.ag, mut.region) %>% 
+  mutate(P = compute_prob(mut.from, mut.to, count)) %>%
+  group_by(bs, mut.region, mut.from, mut.to) %>% 
+  summarise(Q = ifelse(n() == 2, log10(P[same.ag] / P[!same.ag]), NA))
+
+df.ss$mut.region <- factor(df.ss$mut.region, levels = c("V", "N", "J", "Any"))
+
+head(df.ss)
+```
+
+Substitution matrix. Bootstrapped means are plotted for matrices obtained for selected regions and all regions. Dots indicate bootstrap value Z-score > 1.96 threshold compared to Q = 0.
+
+```{r}
+df.ss.m = df.ss %>%
+  group_by(mut.region, mut.from, mut.to) %>% 
+  summarise(Q.sd = sd(Q), Q = mean(Q))
+
+write.table(df.ss.m, "substitution.matrix.txt", sep = "\t", quote = F, row.names = F)
+
+ggplot(df.ss.m, aes(x=mut.from, y=mut.to, fill = Q)) + 
+  geom_tile() + 
+  geom_point(shape = 21, aes(color = abs(Q / Q.sd) > 1.96)) +
+  facet_grid(~mut.region) +
+  scale_fill_gradient2(midpoint = 0, low = "#5e4fa2", mid = "#ffffbf", high = "#9e0142", 
+                       na.value = "white", limits = c(-1.5,1.5)) + 
+  scale_color_manual(values = c(NA, "black", "NA"), guide=F) +
+  theme_bw() + theme(panel.background = element_rect(fill = "white"),
+                     panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+ggplot(subset(df.ss.m, mut.region == "Any"), aes(x=mut.from, y=mut.to, fill = Q)) + 
+  geom_tile() + 
+  geom_point(shape = 21, aes(color = abs(Q / Q.sd) > 1.96)) +
+  scale_fill_gradient2(midpoint = 0, low = "#5e4fa2", mid = "#ffffbf", high = "#9e0142", 
+                       na.value = "white", limits = c(-1.5,1.5)) + 
+  scale_color_manual(values = c(NA, "black", "NA"), guide=F) +
+  theme_bw() + theme(panel.background = element_rect(fill = "white"),
+                     panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+```
+
+Checking that we don't have high Q scores with low Z-score (indicating anecdotal cases with rare amino acids)
+
+```{r}
+df.ss.m$replacement = ifelse(df.ss.m$mut.from == df.ss.m$mut.to, "match", "mismatch")
+
+ggplot(df.ss.m, aes(x=Q, y = abs(Q / Q.sd), color = abs(Q / Q.sd) > 1.96)) + 
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray30") +
+  geom_point(shape = 21) +
+  geom_errorbarh(aes(xmin = Q - Q.sd, xmax = Q + Q.sd)) +
+  facet_grid(replacement~mut.region) +
+  scale_x_continuous(limits=c(-1.5, 1.5)) +
+  ylab("Z") +
+  scale_color_manual("Z>1.96", values = c("black", "red", "black")) +
+  theme_bw()
+```
+
+Replacement-conservation score contrast.
+
+```{r}
+ggplot(df.ss.m, aes(x = Q, group=mut.region, color=mut.region)) + 
+  stat_ecdf(aes(linetype = mut.region == "Any")) + 
+  scale_color_brewer(palette = "Set1") +
+  scale_x_continuous(limits=c(-2,2))+
+  facet_wrap(~replacement) +
+  theme_bw()
+```
+
+Cluster amino acids based on substitution matrix
+
+```{r}
+df.hydro <- data.frame(
+  aa = strsplit("I V L F C M A W G T S Y P H N D Q E K R", " ")[[1]],
+  hydrop = strsplit("4.5 4.2 3.8 2.8 2.5 1.9 1.8 -0.9 -0.4 -0.7 -0.8 -1.3 -1.6 -3.2 -3.5 -3.5 -3.5 -3.5 -3.9 -4.5", " ")[[1]]
+)
+
+df.hydro = df.hydro %>%
+  mutate(hydrop = as.numeric(as.character(hydrop))) %>%
+  arrange(hydrop) %>%
+  mutate(hydrop.sc = round(100 * (hydrop - min(hydrop)) / (max(hydrop) - min(hydrop))))
+
+df.hydro$color = colorRampPalette(brewer.pal(11, 'PRGn'))(101)[df.hydro$hydrop.sc + 1]
+
+aa_colors = df.hydro$color
+names(aa_colors) = df.hydro$aa
+
+###
+
+mat.ss.m = subset(df.ss.m, mut.region == "Any" & mut.from != "C" & mut.to != "C") %>%
+  select(mut.from, mut.to, Q)
+
+mat.ss.m = dcast(as.data.frame(mat.ss.m), mut.from ~ mut.to)
+mat.ss.m[is.na(mat.ss.m)] = 0
+
+rownames(mat.ss.m) = mat.ss.m$mut.from
+mat.ss.m$mut.from = NULL
+
+mat.ss.m = as.matrix(mat.ss.m)
+
+heatmap.2(mat.ss.m, scale="none", symm = T, trace = "none",
+          hclustfun = function(x) hclust(x, method = "ward"),
+          col=colorRampPalette(rev(brewer.pal(11, 'RdBu')))(100),
+          RowSideColors = aa_colors[rownames(mat.ss.m)], 
+          ColSideColors = aa_colors[colnames(mat.ss.m)])
+
+mds = isoMDS(as.dist(10^(-mat.ss.m)))
+plot(mds$points, type = "n") #
+text(mds$points, labels = rownames(mat.ss.m))
+```
+
+Strong amino acids are less likely to be replaced
+
+```{r}
+df.ss.aa = subset(df.ss.m, mut.from == mut.to)
+
+# Useful faceted axis reordering magick
+df.ss.aa$strong = df.ss.aa$mut.from %in% c("F", "I", "L", "M", "V", "W", "Y")
+df.ss.aa$lbl.ds = paste(df.ss.aa$mut.from, df.ss.aa$mut.region, sep = ".")
+df.ss.aa$lbl.ds = reorder(df.ss.aa$lbl.ds, df.ss.aa$Q)
+
+ggplot(df.ss.aa, aes(x = lbl.ds, y = Q, fill=strong)) + 
+  geom_bar(stat="identity") + 
+  scale_fill_manual(values = c("black", "red")) +
+  facet_wrap(~mut.region, scales="free_x") +
+  scale_x_discrete(labels=function(x) sapply(strsplit(x,"[.]"),"[",1)) +
+  theme_bw()
+
+summary(aov(Q ~ mut.region + strong, df.ss.aa))
+```
+
+### Comparison with BLOSUM62
+
+```{r}
+df.bl62 = read.table("blosum62.txt", header = T)
+
+df.bl62 = subset(df.bl62, tmp != "*" & tmp != "X")
+rownames(df.bl62) = df.bl62[,1]
+df.bl62[,1] = NULL
+df.bl62[,(ncol(df.bl62)-1):ncol(df.bl62)]  <- NULL
+
+df.bl62 = data.frame(mut.from=rep(row.names(df.bl62),ncol(df.bl62)),
+                mut.to=rep(colnames(df.bl62),each=nrow(df.bl62)),
+                score=unlist(c(df.bl62)))
+
+df.bl62 = merge(subset(df.ss.m, mut.region == "Any"), df.bl62)
+df.bl62$type = with(df.bl62, ifelse(mut.from == mut.to, "match", "mismatch"))
+df.bl62 = subset(df.bl62, as.integer(mut.from) <= as.integer(mut.to))
+df.bl62$Q[is.na(df.bl62$Q)] = 0
+
+ggplot(df.bl62, aes(x = score, group = score, y = Q)) +
+  geom_boxplot() +
+  geom_beeswarm() +
+  ylab("Q score") +
+  scale_x_continuous("BLOSUM62 score", breaks=-20:20) +
+  facet_wrap(~type, scales = "free_x") + 
+  theme_bw()
+
+summary(aov(Q ~ score, df.bl62))
+```
+
+### Classifier performance
+
+Aux 
+
+```{r}
+df.scoring = merge(df, df.ss.m) %>%
+  group_by(align.id, gene, same.ag) %>%
+  summarise(score = sum(Q, na.rm=T))
+
+df.scoring$matrix.type = "by-region"
+
+df.scoring2 = df
+df.scoring2$mut.region = NULL
+df.ss2 = subset(df.ss.m, mut.region == "Any")
+
+df.scoring2 = merge(df.scoring2, df.ss.m) %>%
+  group_by(align.id, gene, same.ag) %>%
+  summarise(score = sum(Q, na.rm=T))
+
+df.scoring2$matrix.type = "all-regions"
+
+df.scoring = rbind(df.scoring, df.scoring2)
+
+# Compute ROCs
+
+df.scoring.roc = data.frame()
+
+roc2df = function(gene, mattype, rocobj) {
+  print(gene)
+  print(mattype)
+  print(rocobj)
+  
+  with(rocobj, data.frame(gene = gene,
+                          mattype = mattype,
+                          sens = sensitivities,
+                          spec = specificities,
+                          auc = auc[1]))
+}
+
+for (i in unique(df.scoring$gene)) {
+  for (j in unique(df.scoring$matrix.type)) {
+    df.scoring.roc = rbind(df.scoring.roc,
+                          roc2df(i, j, roc(same.ag ~ score, subset(df.scoring, gene == i & matrix.type == j))))
+  }
+}
+
+df.scoring.roc = rbind(df.scoring.roc,
+                        roc2df("Any", "by-region", roc(same.ag ~ score, subset(df.scoring, matrix.type == "by-region"))))
+df.scoring.roc = rbind(df.scoring.roc,
+                        roc2df("Any", "all-regions", roc(same.ag ~ score, subset(df.scoring, matrix.type == "all-regions"))))
+```
+
+No difference between by-region and all-region matrices, except for TRA
+
+```{r}
+ggplot(df.scoring.roc, aes(x=spec, y=sens)) +
+  geom_abline(slope = 1, intercept = 1, linetype = "dashed") +
+  geom_line(color="red") +
+  facet_grid(mattype~gene) +
+  scale_x_reverse() +
+  theme_bw()
+```
+
+> TODO: show blosum not works here
+

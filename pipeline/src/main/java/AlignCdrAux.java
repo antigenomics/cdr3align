@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -30,9 +29,12 @@ public class AlignCdrAux {
                 cdr3AntigenMap.compute(new AminoAcidSequence(splitString[0]),
                         (aminoAcidSequence, cdr3Info) -> {
                             if (cdr3Info == null) {
-                                cdr3Info = new Cdr3Info(aminoAcidSequence);
+                                cdr3Info = new Cdr3Info(aminoAcidSequence,
+                                        Integer.parseInt(splitString[1]),
+                                        Integer.parseInt(splitString[2]),
+                                        splitString[3]);
                             }
-                            cdr3Info.addAntigen(splitString[1]);
+                            cdr3Info.addAntigen(splitString[4]);
                             return cdr3Info;
                         });
             });
@@ -50,7 +52,8 @@ public class AlignCdrAux {
                 "same.ag\tcdr3.len\tweight\t" +
                         "align.id\talign.sub.id\t" +
                         "subst\tins\tdel\t" +
-                        "mut.type\tmut.pos\tmut.from\tmut.to";
+                        "mut.type\tmut.pos\tmut.from\tmut.to\t" +
+                        "mut.region\tgene";
 
 
         try (final PrintWriter pw = new PrintWriter(new File(outputFileName))) {
@@ -85,7 +88,7 @@ public class AlignCdrAux {
                         while ((otherCdr3Info = iter.next()) != null) {
                             Alignment<AminoAcidSequence> alignment = iter.getCurrentAlignment();
 
-                            if (thisCdr3Info.nonDuplicateComparison(otherCdr3Info) &&
+                            if (thisCdr3Info.eligibleComparison(otherCdr3Info) &&
                                     alignment.getSequence1Range().length() == thisCdr3.size()) { // enforce global (JIC)
                                 final AlignmentInfo alignmentInfo = new AlignmentInfo(
                                         thisCdr3Info.antigensOverlap(otherCdr3Info),
@@ -149,7 +152,9 @@ public class AlignCdrAux {
                                             (isInsertion ?
                                                     "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
                                             (mutationType == MutationType.Deletion ?
-                                                    "-" : mutations.getToAsSymbolByIndex(k))
+                                                    "-" : mutations.getToAsSymbolByIndex(k)) + "\t" +
+                                            thisCdr3Info.getRegion(pos) + "\t" + 
+                                            thisCdr3Info.gene
                                     );
 
                                     mutationCounter.incrementAndGet();
@@ -170,7 +175,9 @@ public class AlignCdrAux {
                                                 "E\t" +
                                                 i + "\t" +
                                                 aa + "\t" +
-                                                aa
+                                                aa + "\t" +
+                                                thisCdr3Info.getRegion(i) + "\t" +
+                                                thisCdr3Info.gene
                                         );
                                     }
                                 }
@@ -202,9 +209,14 @@ public class AlignCdrAux {
     private static class Cdr3Info {
         final AminoAcidSequence cdr3;
         final Set<String> antigens = new HashSet<>();
+        final int vEnd, jStart;
+        final String gene;
 
-        Cdr3Info(AminoAcidSequence cdr3) {
+        Cdr3Info(AminoAcidSequence cdr3, int vEnd, int jStart, String gene) {
             this.cdr3 = cdr3;
+            this.vEnd = vEnd;
+            this.jStart = jStart;
+            this.gene = gene;
         }
 
         void addAntigen(String antigen) {
@@ -215,8 +227,8 @@ public class AlignCdrAux {
             return overlaps(this.antigens, other.antigens);
         }
 
-        boolean nonDuplicateComparison(Cdr3Info otherCdr3Info) {
-            return cdr3.compareTo(otherCdr3Info.cdr3) > 0;
+        boolean eligibleComparison(Cdr3Info otherCdr3Info) {
+            return gene.equals(otherCdr3Info.gene) && cdr3.compareTo(otherCdr3Info.cdr3) > 0;
         }
 
         private static boolean overlaps(Set<String> set1, Set<String> set2) {
@@ -228,6 +240,10 @@ public class AlignCdrAux {
                     return true;
             }
             return false;
+        }
+
+        String getRegion(int pos) {
+            return pos < vEnd ? "V" : (pos > jStart ? "J" : "N");
         }
     }
 
