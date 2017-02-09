@@ -49,7 +49,7 @@ public class AlignCdrAux {
         final TreeSearchParameters tsp = new TreeSearchParameters(maxSubstitutions, maxIndels, maxIndels);
 
         String header =
-                "same.ag\tcdr3.len\tweight\t" +
+                "unknown.ag\tsame.ag\tcdr3.len\tweight\t" +
                         "align.id\talign.sub.id\t" +
                         "subst\tins\tdel\t" +
                         "mut.type\tmut.pos\tmut.from\tmut.to\t" +
@@ -80,116 +80,121 @@ public class AlignCdrAux {
             cdr3AntigenMap.values().parallelStream().forEach(thisCdr3Info -> {
                         AminoAcidSequence thisCdr3 = thisCdr3Info.cdr3;
                         Cdr3Info otherCdr3Info;
-                        NeighborhoodIterator<AminoAcidSequence, Cdr3Info> iter = stm
-                                .getNeighborhoodIterator(thisCdr3, tsp);
 
-                        Map<AminoAcidSequence, List<AlignmentInfo>> alignmentVariants = new HashMap<>();
+                        if (!thisCdr3Info.unknownAntigen()) {
+                            NeighborhoodIterator<AminoAcidSequence, Cdr3Info> iter = stm
+                                    .getNeighborhoodIterator(thisCdr3, tsp);
 
-                        while ((otherCdr3Info = iter.next()) != null) {
-                            Alignment<AminoAcidSequence> alignment = iter.getCurrentAlignment();
+                            Map<AminoAcidSequence, List<AlignmentInfo>> alignmentVariants = new HashMap<>();
 
-                            if (thisCdr3Info.eligibleComparison(otherCdr3Info) &&
-                                    alignment.getSequence1Range().length() == thisCdr3.size()) { // enforce global (JIC)
-                                final AlignmentInfo alignmentInfo = new AlignmentInfo(
-                                        thisCdr3Info.antigensOverlap(otherCdr3Info),
-                                        alignment);
+                            while ((otherCdr3Info = iter.next()) != null) {
+                                Alignment<AminoAcidSequence> alignment = iter.getCurrentAlignment();
 
-                                alignmentVariants.compute(otherCdr3Info.cdr3,
-                                        (cdr3, alignments) -> {
-                                            if (alignments == null) {
-                                                alignments = new ArrayList<>();
-                                            }
-                                            alignments.add(alignmentInfo);
-                                            return alignments;
-                                        });
+                                if (thisCdr3Info.eligibleComparison(otherCdr3Info) &&
+                                        alignment.getSequence1Range().length() == thisCdr3.size()) { // enforce global (JIC)
+                                    final AlignmentInfo alignmentInfo = new AlignmentInfo(
+                                            thisCdr3Info.antigensOverlap(otherCdr3Info),
+                                            alignment,
+                                            thisCdr3Info.unknownAntigen() || otherCdr3Info.unknownAntigen());
+
+                                    alignmentVariants.compute(otherCdr3Info.cdr3,
+                                            (cdr3, alignments) -> {
+                                                if (alignments == null) {
+                                                    alignments = new ArrayList<>();
+                                                }
+                                                alignments.add(alignmentInfo);
+                                                return alignments;
+                                            });
+                                }
                             }
-                        }
 
-                        for (List<AlignmentInfo> alignmentInfos : alignmentVariants.values()) {
-                            float weight = 1.0f / alignmentInfos.size();
-                            int alignmentId = alignmentIdCounter.incrementAndGet(),
-                                    alignmentSubId = 0;
+                            for (List<AlignmentInfo> alignmentInfos : alignmentVariants.values()) {
+                                float weight = 1.0f / alignmentInfos.size();
+                                int alignmentId = alignmentIdCounter.incrementAndGet(),
+                                        alignmentSubId = 0;
 
-                            for (AlignmentInfo alignmentInfo : alignmentInfos) {
-                                Set<Integer> mutatedPositions = new HashSet<>();
-                                Alignment alignment = alignmentInfo.alignment;
-                                AminoAcidSequence reference = (AminoAcidSequence) alignment.getSequence1();
+                                for (AlignmentInfo alignmentInfo : alignmentInfos) {
+                                    Set<Integer> mutatedPositions = new HashSet<>();
+                                    Alignment alignment = alignmentInfo.alignment;
+                                    AminoAcidSequence reference = (AminoAcidSequence) alignment.getSequence1();
 
-                                String prefix = (alignmentInfo.sameAntigen ? 1 : 0) + "\t" +
-                                        reference.size() + "\t" + weight + "\t" +
-                                        alignmentId + "\t" + (alignmentSubId++) + "\t";
+                                    String prefix = (alignmentInfo.unknownAntigen ? "TRUE" : "FALSE") + "\t" +
+                                            (alignmentInfo.sameAntigen ? "TRUE" : "FALSE") + "\t" +
+                                            reference.size() + "\t" + weight + "\t" +
+                                            alignmentId + "\t" + (alignmentSubId++) + "\t";
 
-                                Mutations mutations = alignment.getAbsoluteMutations();
+                                    Mutations mutations = alignment.getAbsoluteMutations();
 
-                                // Count true number of mismatches
+                                    // Count true number of mismatches
 
-                                int subst = 0, ins = 0, del = 0;
+                                    int subst = 0, ins = 0, del = 0;
 
-                                for (int k = 0; k < mutations.size(); k++) {
-                                    switch (mutations.getTypeByIndex(k)) {
-                                        case Substitution:
-                                            subst++;
-                                            break;
-                                        case Insertion:
-                                            ins++;
-                                            break;
-                                        case Deletion:
-                                            del++;
-                                            break;
+                                    for (int k = 0; k < mutations.size(); k++) {
+                                        switch (mutations.getTypeByIndex(k)) {
+                                            case Substitution:
+                                                subst++;
+                                                break;
+                                            case Insertion:
+                                                ins++;
+                                                break;
+                                            case Deletion:
+                                                del++;
+                                                break;
+                                        }
                                     }
-                                }
 
-                                prefix += subst + "\t" + ins + "\t" + del + "\t";
+                                    prefix += subst + "\t" + ins + "\t" + del + "\t";
 
-                                for (int k = 0; k < mutations.size(); k++) {
-                                    MutationType mutationType = mutations.getTypeByIndex(k);
-                                    int pos = mutations.getPositionByIndex(k);
-                                    boolean isInsertion = mutationType == MutationType.Insertion;
+                                    for (int k = 0; k < mutations.size(); k++) {
+                                        MutationType mutationType = mutations.getTypeByIndex(k);
+                                        int pos = mutations.getPositionByIndex(k);
+                                        boolean isInsertion = mutationType == MutationType.Insertion;
 
-                                    lines.add(prefix +
-                                            shortMutationType(mutationType) + "\t" +
-                                            pos + "\t" +
-                                            (isInsertion ?
-                                                    "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
-                                            (mutationType == MutationType.Deletion ?
-                                                    "-" : mutations.getToAsSymbolByIndex(k)) + "\t" +
-                                            thisCdr3Info.getRegion(pos) + "\t" + 
-                                            thisCdr3Info.gene
-                                    );
-
-                                    mutationCounter.incrementAndGet();
-
-                                    // Store mismatched positions
-
-                                    if (!isInsertion) {
-                                        mutatedPositions.add(pos);
-                                    }
-                                }
-
-                                // Exact matches
-
-                                for (int i = 0; i < reference.size(); i++) {
-                                    char aa = thisCdr3.symbolAt(i);
-                                    if (!mutatedPositions.contains(i)) {
                                         lines.add(prefix +
-                                                "E\t" +
-                                                i + "\t" +
-                                                aa + "\t" +
-                                                aa + "\t" +
-                                                thisCdr3Info.getRegion(i) + "\t" +
+                                                shortMutationType(mutationType) + "\t" +
+                                                pos + "\t" +
+                                                (isInsertion ?
+                                                        "-" : mutations.getFromAsSymbolByIndex(k)) + "\t" +
+                                                (mutationType == MutationType.Deletion ?
+                                                        "-" : mutations.getToAsSymbolByIndex(k)) + "\t" +
+                                                thisCdr3Info.getRegion(pos) + "\t" +
                                                 thisCdr3Info.gene
                                         );
+
+                                        mutationCounter.incrementAndGet();
+
+                                        // Store mismatched positions
+
+                                        if (!isInsertion) {
+                                            mutatedPositions.add(pos);
+                                        }
+                                    }
+
+                                    // Exact matches
+
+                                    for (int i = 0; i < reference.size(); i++) {
+                                        char aa = thisCdr3.symbolAt(i);
+                                        if (!mutatedPositions.contains(i)) {
+                                            lines.add(prefix +
+                                                    "E\t" +
+                                                    i + "\t" +
+                                                    aa + "\t" +
+                                                    aa + "\t" +
+                                                    thisCdr3Info.getRegion(i) + "\t" +
+                                                    thisCdr3Info.gene
+                                            );
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        int count = counter.incrementAndGet();
+                            int count = counter.incrementAndGet();
 
-                        if (count % 100 == 0) {
-                            System.out.println("[" + (new Date()) + "] " +
-                                    "Queried " + count + " of " + cdr3AntigenMap.size() + " cdr3 sequences. " +
-                                    "Recorded ~" + mutationCounter.get() + " mutations so far.");
+                            if (count % 100 == 0) {
+                                System.out.println("[" + (new Date()) + "] " +
+                                        "Queried " + count + " of " + cdr3AntigenMap.size() + " cdr3 sequences. " +
+                                        "Recorded ~" + mutationCounter.get() + " mutations so far.");
+                            }
                         }
                     }
             );
@@ -207,6 +212,8 @@ public class AlignCdrAux {
     }
 
     private static class Cdr3Info {
+        final static String NA_ANTIGEN_CHAR = ".";
+
         final AminoAcidSequence cdr3;
         final Set<String> antigens = new HashSet<>();
         final int vEnd, jStart;
@@ -227,8 +234,16 @@ public class AlignCdrAux {
             return overlaps(this.antigens, other.antigens);
         }
 
+        boolean unknownAntigen() {
+            return antigens.size() == 1 && antigens.contains(NA_ANTIGEN_CHAR);
+        }
+
         boolean eligibleComparison(Cdr3Info otherCdr3Info) {
-            return gene.equals(otherCdr3Info.gene) && cdr3.compareTo(otherCdr3Info.cdr3) > 0;
+            return gene.equals(otherCdr3Info.gene) &&
+                    // unknown antigens are not searched, so just remove exact match
+                    ((otherCdr3Info.unknownAntigen() && cdr3.compareTo(otherCdr3Info.cdr3) != 0) ||
+                            // remove exact matches and duplicate comparisons
+                            cdr3.compareTo(otherCdr3Info.cdr3) > 0);
         }
 
         private static boolean overlaps(Set<String> set1, Set<String> set2) {
@@ -236,7 +251,7 @@ public class AlignCdrAux {
                 return overlaps(set2, set1);
             }
             for (String value : set1) {
-                if (set2.contains(value))
+                if (!value.equals(NA_ANTIGEN_CHAR) && set2.contains(value))
                     return true;
             }
             return false;
@@ -248,12 +263,14 @@ public class AlignCdrAux {
     }
 
     private static class AlignmentInfo {
-        final boolean sameAntigen;
+        final boolean sameAntigen, unknownAntigen;
         final Alignment<AminoAcidSequence> alignment;
 
-        AlignmentInfo(boolean sameAntigen, Alignment<AminoAcidSequence> alignment) {
+        AlignmentInfo(boolean sameAntigen, Alignment<AminoAcidSequence> alignment,
+                      boolean unknownAntigen) {
             this.sameAntigen = sameAntigen;
             this.alignment = alignment;
+            this.unknownAntigen = unknownAntigen;
         }
     }
 
