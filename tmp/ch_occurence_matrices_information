@@ -1,0 +1,13 @@
+{
+base_scripts: ch_antigen_base.py {
+1_script: ch_read_VDJdb.py {
+2_script: ch_test_and_teach_VDJdb.py,
+2_script: ch_groovy_treesearch.py {
+3_script: ch_get_pairalignment_set.py {
+4_script: ch_info_from_alignments
+},
+3_script: ch_get_occurence_matrix
+}
+}
+}
+}

@@ -1,0 +1,37 @@
+- Необходимо выбрать пары аминокислотных последовательностей CDR3 специфичных к одному и тому же антигену
+ (antigen.epitope) с достаточно малым расстоянием d(#substitutions, #insertions, #deletions)
+
+ Мы рассматриваем не эволюционные расстояния, поэтому надо подумать над тем, как показать схожесть последовательностей
+ другим путем:
+ возможно, гидрофобность/гидрофильность, полярность, объем? Попытаться выразить их в последовательности, и сравнивать
+ значения весов?
+ Изучить Ленинджер/molbiol.ru/google.scholar
+зависимость еще и от MHC. АРГХ.
+
+ - Посмотреть как ведет себя total число таких пар, распределение числа пар для одного CDR3 и
+распределение числа вариантов выравнивания (с большим числом замен можно сопоставить 2 последовательности
+различно в зависимости от penalty за различные mismatch) в зависимости от максимального числа substitutions и indels
+- Для одного оптимального или нескольких d_max (порогов по #substitutions, #insertions, #deletions)
+пройтись по всем парам и рассчитать матрицу замен, а также распределение indel по позициям внутри CDR3
+
+Проблема программы:
+bigmatrix = pd.DataFrame(0, index = sequences_list, columns=sequences_list)
+subs, dels, ins, tot = 3, 3, 3, 9
+with open('sub_del_ins_tot/out_teach_'+str(subs)+'_'+str(dels)+'_'+str(ins)+'_'+str(tot), 'r') as inp:
+    pairs = set()
+    i = 0
+    for line in inp:
+        aaa = line.strip().split()
+        pairs.add((aaa[0].replace('-','').upper(),aaa[1].replace('-','').upper()))
+    print(len(pairs))
+    for aaa in pairs:
+        i += 1
+        if aaa[0] == 'CASSVAVSAGTYEQYF' and aaa[1] == 'CASSAGTSGEYEQYF':
+            print('yeah_1')
+        if aaa[1] == 'CASSVAVSAGTYEQYF' and aaa[0] == 'CASSAGTSGEYEQYF':
+            print('yeah_2')
+        #bigmatrix[aaa[0]][aaa[1]] = 1
+        #print(i)
+    #bigmatrix.to_csv('matrices_from_alignment/bigmatrix_'+str(subs)+'_'+str(dels)+'_'+str(ins)+'_'+str(tot))
+
+Не соблюдается симметрия при условиях, ее допускающих..

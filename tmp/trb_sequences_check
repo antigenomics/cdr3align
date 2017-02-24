@@ -1,0 +1,1553 @@
+BLASTP 2.5.0+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+Reference for composition-based statistics: Alejandro A. Schaffer,
+L. Aravind, Thomas L. Madden, Sergei Shavirin, John L. Spouge, Yuri
+I. Wolf, Eugene V. Koonin, and Stephen F. Altschul (2001),
+"Improving the accuracy of PSI-BLAST protein database searches with
+composition-based statistics and other refinements", Nucleic Acids
+Res. 29:2994-3005.
+
+
+
+Database: User specified sequence set (Input: trb_sequences_all).
+           3,534 sequences; 51,634 total letters
+
+
+
+Query= QASQEVKNW_CASRTQRWETQYF
+
+Length=13
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  ISPRTLNAW_CASRTQRWETQYF                                             26.9    3e-04
+  QASQEVKNW_CASRTQRWETQYF                                             26.9    3e-04
+  CTPYDINQM_CASRTGRVETQYF                                             22.7    0.014
+  NLVPMVATV_CASSQTQLWETQYF                                            20.9    0.062
+  HPKVSSEVHI_CASRTSGEETQYF                                            20.9    0.077
+  IIKDYGKQM_CASRTSGEETQYF                                             20.9    0.077
+  IIKDYGKQM_CASRTGGEETQYF                                             20.6    0.086
+  NLVPMVATV_CASSLSQLWETQYF                                            20.0    0.16 
+  TPRVTGGGAM_CASSDQSQETQYF                                            19.7    0.23 
+  HSKKKCDEL_CAIRTRIGETQYF                                             19.4    0.27 
+  NLVPMVATV_CASSFGQAWETQYF                                            19.1    0.31 
+  CTPYDINQM_CASSLGMSEPRWETQYF                                         18.8    0.39 
+  YVLDHLIVV_CASTVQGRETQYF                                             19.1    0.40 
+  TPGPGVRYPL_CASRKGIQETQYF                                            18.8    0.44 
+  NLVPMVATV_CASSSQRESETQYF                                            18.8    0.47 
+  ILKEPVHGV_CASSLDGGETQYF                                             18.5    0.56 
+  PKYVKQNTLKLAT_CASSSPWETQYF                                          18.5    0.57 
+  NLVPMVATV_CASSLSQLWETRYF                                            18.5    0.58 
+  ISPRTLNAW_CASSLAQGWKTQYF                                            18.5    0.66 
+  ELKRKMIYM_CASVTGSTDTQYF                                             18.5    0.67 
+  ILKEPVHGV_CASSQDGGETQYF                                             18.2    0.77 
+  TTPESANL_CASRTGLGNTVYF                                              18.2    0.77 
+  YVLDHLIVV_CASSPASSGSWETQYF                                          18.2    0.78 
+  VSFIEFVGW_CASRGMTPPTQYF                                             18.2    0.78 
+  CTPYDINQM_CASSVRDWQETQYF                                            18.2    0.79 
+  NLVPMVATV_CASSPHQADTQYF                                             18.2    0.81 
+  LQPLALEGSLQKRG_CASRPRDPVTQYF                                        17.9    0.94 
+  GPGHKARVL_CATSSRGGETQYF                                             17.9    0.96 
+  NLVPMVATV_CSLRSQGTDTQYF                                             17.9    1.0  
+  NLVPMVATV_CASSLTGQETQYFGP                                           17.6    1.1  
+  RAKFKQLL_CASSVLAGDTQYF                                              17.6    1.3  
+  HPVGEADYFEY_CASREKGYDEQFF                                           17.6    1.3  
+  NLVPMVATV_CASSPGTEETQYF                                             17.6    1.3  
+  GPGMKARVL_CASSQETGDTQYF                                             17.6    1.3  
+  APQPELPYPQPG_CASSVRSTDTQYF                                          17.6    1.4  
+  GILGFVFTL_CASSIRSADTQYF                                             17.6    1.4  
+  CTPYDINQM_CASSRTGGRETQYF                                            17.6    1.4  
+  PKYVKQNTLKLAT_CASTLDRDGTQYF                                         17.6    1.4  
+  GLCTLVAML_CASSPLMGDTQYF                                             17.6    1.4  
+  QPLALEGSLQKRG_CASRPRRDNEQFF                                         17.6    1.4  
+  ISPRTLNAW_CASSLGLDETQYF                                             17.6    1.5  
+  LPPIVAKEI_CASSSKDGQSQYF                                             17.6    1.5  
+  GLCTLVAML_CASSFGQQETQYF                                             17.3    1.6  
+  GILGFVFTL_CASSIRSTDTQYF                                             17.3    1.6  
+  IIKDYGKQM_CASRTSGGHEQFF                                             17.3    1.6  
+  HPVGEADYFEY_CASSPRRYNLQFF                                           17.3    1.6  
+  LPPIVAKEI_CASRDGQGHEQYF                                             17.3    1.7  
+  CTPYDINQM_CASSNRRYNEQFF                                             17.3    1.7  
+  PKYVKQNTLKLAT_CASSRTGSTDTQYF                                        17.3    1.8  
+  EPLPQGQLTAY_CASRSPGYNEQFF                                           17.3    1.8  
+  NLVPMVATV_CASSLAGADTQYF                                             17.3    1.8  
+  KRWIIMGLNK_CASSPGVADTQYF                                            17.3    2.0  
+  NLVPMVATV_CASSPHQAGTQYF                                             17.0    2.0  
+  GILGFVFTL_CASSIISTDTQYF                                             17.0    2.1  
+  LPPIVAKEI_CASRDRQSHEQYF                                             17.0    2.1  
+  HPVGEADYFEY_CASSPRRYNEQFF                                           17.0    2.1  
+  ILKEPVHGV_CAISGDGGETQYF                                             17.0    2.2  
+  FPRPWLHGL_CASSLERSSEQYF                                             17.0    2.3  
+  KRWIILGLNK_CASSQGQLNTQYF                                            17.0    2.3  
+  TTPESANL_CASSQERWGLSNQPQYF                                          16.7    2.3  
+  TTPESANL_CASSQDRWGTSNQPQYF                                          16.7    2.4  
+  CTPYDINQM_CASSLGVGKTQYF                                             17.0    2.4  
+  GILGFVFTL_CASSIRSSHTQYF                                             17.0    2.5  
+  FLRGRAYGL_CASGQGNFDIQYF                                             17.0    2.5  
+  CTPYDINQM_CASGRYRVATQYF                                             16.7    2.6  
+  ILKEPVHGV_CAISEDGGETQYF                                             16.7    3.0  
+  GLCTLVAML_CASSAWLVETQYF                                             16.7    3.0  
+  RPRGEVRFL_CASSTDSVDEQFF                                             16.7    3.1  
+  QASQEVKNW_CASSKGRYNEQFF                                             16.7    3.2  
+  IIKDYGKQM_CASRTSGDYEQYF                                             16.7    3.2  
+  RAKFKQLL_CSTGTGEGGTQYF                                              16.5    3.3  
+  GPGMKARVL_CASSLELGDEQYF                                             16.5    3.4  
+  KRWIILGLNK_CASSQGTTDTQYF                                            16.5    3.5  
+  KLVALGINAV_CASTQGSTDTQYF                                            16.5    3.5  
+  CTPYDINQM_CASSSEGNQPQYF                                             16.5    3.6  
+  TTPESANL_CASRPGLGREQYF                                              16.5    3.7  
+  LPPIVAKEI_CASSSRQGKEQYF                                             16.5    3.8  
+  ISPRTLNAW_CASRSPLGYEQYF                                             16.5    3.8  
+  KLVALGINAV_CASSSSWADTQYF                                            16.5    3.8  
+  GLCTLVAML_CASSQSPGGTQYF                                             16.5    3.9  
+  IIKDYGKQM_CASRGTGVHEQYF                                             16.5    3.9  
+  EPLPQGQLTAY_CASRPPGGNEQFF                                           16.5    4.0  
+  QPFPQPELPYP_CSAGVGGQETQYF                                           16.5    4.0  
+  GPGMKARVL_CASSLETGDEQYF                                             16.5    4.1  
+  CTPYDINQM_CASKDRGNQPQYF                                             16.5    4.1  
+  FPRPWLHGL_CASSLWDQETQYF                                             16.5    4.1  
+  GLCTLVAML_CASSVAGGDEQYF                                             16.5    4.1  
+  GPGHKARVL_CATGRLAGETQYF                                             16.5    4.1  
+  RAKFKQLL_CATKRTGTDTQYF                                              16.2    4.2  
+  SLYNTVATL_CSAPVLPQETQYF                                             16.2    4.3  
+  CTPYDINQM_CASSPPRRGEQYF                                             16.2    4.5  
+  CTPYDINQM_CASSDRDSDPQYF                                             16.2    4.5  
+  ELAGIGLTV_CASSQDGGVTQYF                                             16.2    4.5  
+  LPPIVAKEI_CASSSRDGQEQYF                                             16.2    4.7  
+  TTPESANL_CASSSQRNSNQPQYF                                            16.2    4.7  
+  LPPIVAKEI_CASSSRGGQEQYF                                             16.2    4.9  
+  LPPIVAKEI_CASSPRQGQEQYF                                             16.2    5.0  
+  TTPESANL_CASSIGGFETEAFF                                             16.2    5.1  
+  GPGMKARVL_CASSQETGDEQYF                                             16.2    5.2  
+  LPPIVAKEI_CASSPGQGQEQYF                                             16.2    5.2  
+  EPLPQGQLTAY_CASRPPGVYEQYF                                           16.2    5.2  
+  RAKFKQLL_CASSLWIQETQYF                                              16.2    5.3  
+  APQPELPYPQPGS_CASSFRFTDTQYF                                         16.2    5.3  
+  CVETMCNEY_CASSLARNQPQHF                                             15.9    5.7  
+  NLVPMVATV_CASRLGLGYEQYF                                             15.9    5.8  
+  RPRGEVRFL_CASSVWGTDTQYF                                             15.9    5.8  
+  VLEETSVML_CASKWGRDLWQPQHF                                           15.9    6.0  
+  LPPIVAKEI_CASSPRQGHEQYF                                             15.9    6.1  
+  NLVPMVATV_CASSLVGTGGWDEQFF                                          15.9    6.2  
+  FPRPWLHGL_CASSIKGYNEQFF                                             15.9    6.3  
+  IIKDYGKQM_CASRGSGVYEQYF                                             15.9    6.4  
+  HPKVSSEVHI_CASSQEGWDGRYEQYF                                         15.6    6.7  
+  PKYVKQNTLKLAT_CASSVAGGETEAFF                                        15.6    6.8  
+  GLCTLVAML_CASSLGTGDEQYF                                             15.6    7.0  
+  CTPYDINQM_CASSLDSNQPQYF                                             15.6    7.0  
+  FLRGRAYGL_CASSTGQAYEQYF                                             15.6    7.1  
+  GPGMKARVL_CASSLELGDEQFF                                             15.6    7.4  
+  NLVPMVATV_CASSFGQAWYEQYF                                            15.6    7.5  
+  GPGHKARVL_CASSQDGVYTQYF                                             15.6    7.6  
+  EPLPQGQLTAY_CASSFYDWNTEAFF                                          15.6    7.6  
+  KRWIILGLNK_CSARVTSSDEQYF                                            15.6    8.3  
+  GLNKIVRMY_CASSLQGAPEQFF                                             15.6    8.7  
+  RAKFKQLL_CASSPYGIDEQYF                                              15.3    8.9  
+  GLCTLVAML_CASSVAGGDEQFF                                             15.3    9.2  
+  SLYNTVATL_CASSGVGYQPQHF                                             15.3    9.7  
+
+
+> ISPRTLNAW_CASRTQRWETQYF
+Length=13
+
+ Score = 26.9 bits (68),  Expect = 3e-04, Method: Compositional matrix adjust.
+ Identities = 13/13 (100%), Positives = 13/13 (100%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRTQRWETQYF
+Sbjct  1   CASRTQRWETQYF  13
+
+
+> QASQEVKNW_CASRTQRWETQYF
+Length=13
+
+ Score = 26.9 bits (68),  Expect = 3e-04, Method: Compositional matrix adjust.
+ Identities = 13/13 (100%), Positives = 13/13 (100%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRTQRWETQYF
+Sbjct  1   CASRTQRWETQYF  13
+
+
+> CTPYDINQM_CASRTGRVETQYF
+Length=13
+
+ Score = 22.7 bits (54),  Expect = 0.014, Method: Compositional matrix adjust.
+ Identities = 11/13 (85%), Positives = 11/13 (85%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT R ETQYF
+Sbjct  1   CASRTGRVETQYF  13
+
+
+> NLVPMVATV_CASSQTQLWETQYF
+Length=14
+
+ Score = 20.9 bits (48),  Expect = 0.062, Method: Compositional matrix adjust.
+ Identities = 11/14 (79%), Positives = 12/14 (86%), Gaps = 1/14 (7%)
+
+Query  1   CAS-RTQRWETQYF  13
+           CAS +TQ WETQYF
+Sbjct  1   CASSQTQLWETQYF  14
+
+
+> HPKVSSEVHI_CASRTSGEETQYF
+Length=13
+
+ Score = 20.9 bits (48),  Expect = 0.077, Method: Compositional matrix adjust.
+ Identities = 10/13 (77%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT   ETQYF
+Sbjct  1   CASRTSGEETQYF  13
+
+
+> IIKDYGKQM_CASRTSGEETQYF
+Length=13
+
+ Score = 20.9 bits (48),  Expect = 0.077, Method: Compositional matrix adjust.
+ Identities = 10/13 (77%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT   ETQYF
+Sbjct  1   CASRTSGEETQYF  13
+
+
+> IIKDYGKQM_CASRTGGEETQYF
+Length=13
+
+ Score = 20.6 bits (47),  Expect = 0.086, Method: Compositional matrix adjust.
+ Identities = 10/13 (77%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT   ETQYF
+Sbjct  1   CASRTGGEETQYF  13
+
+
+> NLVPMVATV_CASSLSQLWETQYF
+Length=14
+
+ Score = 20.0 bits (45),  Expect = 0.16, Method: Compositional matrix adjust.
+ Identities = 10/14 (71%), Positives = 11/14 (79%), Gaps = 1/14 (7%)
+
+Query  1   CASR-TQRWETQYF  13
+           CAS  +Q WETQYF
+Sbjct  1   CASSLSQLWETQYF  14
+
+
+> TPRVTGGGAM_CASSDQSQETQYF
+Length=13
+
+ Score = 19.7 bits (44),  Expect = 0.23, Method: Compositional matrix adjust.
+ Identities = 9/13 (69%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  Q  ETQYF
+Sbjct  1   CASSDQSQETQYF  13
+
+
+> HSKKKCDEL_CAIRTRIGETQYF
+Length=13
+
+ Score = 19.4 bits (43),  Expect = 0.27, Method: Compositional matrix adjust.
+ Identities = 9/13 (69%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA RT+  ETQYF
+Sbjct  1   CAIRTRIGETQYF  13
+
+
+> NLVPMVATV_CASSFGQAWETQYF
+Length=14
+
+ Score = 19.1 bits (42),  Expect = 0.31, Method: Compositional matrix adjust.
+ Identities = 10/14 (71%), Positives = 10/14 (71%), Gaps = 1/14 (7%)
+
+Query  1   CASR-TQRWETQYF  13
+           CAS   Q WETQYF
+Sbjct  1   CASSFGQAWETQYF  14
+
+
+> CTPYDINQM_CASSLGMSEPRWETQYF
+Length=17
+
+ Score = 18.8 bits (41),  Expect = 0.39, Method: Compositional matrix adjust.
+ Identities = 10/17 (59%), Positives = 10/17 (59%), Gaps = 4/17 (24%)
+
+Query  1   CASRT----QRWETQYF  13
+           CAS       RWETQYF
+Sbjct  1   CASSLGMSEPRWETQYF  17
+
+
+> YVLDHLIVV_CASTVQGRETQYF
+Length=13
+
+ Score = 19.1 bits (42),  Expect = 0.40, Method: Compositional matrix adjust.
+ Identities = 9/13 (69%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  Q  ETQYF
+Sbjct  1   CASTVQGRETQYF  13
+
+
+> TPGPGVRYPL_CASRKGIQETQYF
+Length=13
+
+ Score = 18.8 bits (41),  Expect = 0.44, Method: Compositional matrix adjust.
+ Identities = 9/13 (69%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR    ETQYF
+Sbjct  1   CASRKGIQETQYF  13
+
+
+> NLVPMVATV_CASSSQRESETQYF
+Length=14
+
+ Score = 18.8 bits (41),  Expect = 0.47, Method: Compositional matrix adjust.
+ Identities = 10/14 (71%), Positives = 11/14 (79%), Gaps = 1/14 (7%)
+
+Query  1   CASRTQR-WETQYF  13
+           CAS +QR  ETQYF
+Sbjct  1   CASSSQRESETQYF  14
+
+
+> ILKEPVHGV_CASSLDGGETQYF
+Length=13
+
+ Score = 18.5 bits (40),  Expect = 0.56, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSLDGGETQYF  13
+
+
+> PKYVKQNTLKLAT_CASSSPWETQYF
+Length=12
+
+ Score = 18.5 bits (40),  Expect = 0.57, Method: Compositional matrix adjust.
+ Identities = 9/13 (69%), Positives = 10/13 (77%), Gaps = 1/13 (8%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS +  WETQYF
+Sbjct  1   CASSSP-WETQYF  12
+
+
+> NLVPMVATV_CASSLSQLWETRYF
+Length=14
+
+ Score = 18.5 bits (40),  Expect = 0.58, Method: Compositional matrix adjust.
+ Identities = 9/14 (64%), Positives = 11/14 (79%), Gaps = 1/14 (7%)
+
+Query  1   CASR-TQRWETQYF  13
+           CAS  +Q WET+YF
+Sbjct  1   CASSLSQLWETRYF  14
+
+
+> ISPRTLNAW_CASSLAQGWKTQYF
+Length=14
+
+ Score = 18.5 bits (40),  Expect = 0.66, Method: Compositional matrix adjust.
+ Identities = 9/14 (64%), Positives = 10/14 (71%), Gaps = 1/14 (7%)
+
+Query  1   CASR-TQRWETQYF  13
+           CAS   Q W+TQYF
+Sbjct  1   CASSLAQGWKTQYF  14
+
+
+> ELKRKMIYM_CASVTGSTDTQYF
+Length=13
+
+ Score = 18.5 bits (40),  Expect = 0.67, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS T   +TQYF
+Sbjct  1   CASVTGSTDTQYF  13
+
+
+> ILKEPVHGV_CASSQDGGETQYF
+Length=13
+
+ Score = 18.2 bits (39),  Expect = 0.77, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSQDGGETQYF  13
+
+
+> TTPESANL_CASRTGLGNTVYF
+Length=13
+
+ Score = 18.2 bits (39),  Expect = 0.77, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT    T YF
+Sbjct  1   CASRTGLGNTVYF  13
+
+
+> YVLDHLIVV_CASSPASSGSWETQYF
+Length=16
+
+ Score = 18.2 bits (39),  Expect = 0.78, Method: Compositional matrix adjust.
+ Identities = 9/16 (56%), Positives = 10/16 (63%), Gaps = 3/16 (19%)
+
+Query  1   CASR---TQRWETQYF  13
+           CAS    +  WETQYF
+Sbjct  1   CASSPASSGSWETQYF  16
+
+
+> VSFIEFVGW_CASRGMTPPTQYF
+Length=13
+
+ Score = 18.2 bits (39),  Expect = 0.78, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR     TQYF
+Sbjct  1   CASRGMTPPTQYF  13
+
+
+> CTPYDINQM_CASSVRDWQETQYF
+Length=14
+
+ Score = 18.2 bits (39),  Expect = 0.79, Method: Compositional matrix adjust.
+ Identities = 9/14 (64%), Positives = 10/14 (71%), Gaps = 1/14 (7%)
+
+Query  1   CASRTQRW-ETQYF  13
+           CAS  + W ETQYF
+Sbjct  1   CASSVRDWQETQYF  14
+
+
+> NLVPMVATV_CASSPHQADTQYF
+Length=13
+
+ Score = 18.2 bits (39),  Expect = 0.81, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   + +TQYF
+Sbjct  1   CASSPHQADTQYF  13
+
+
+> LQPLALEGSLQKRG_CASRPRDPVTQYF
+Length=13
+
+ Score = 17.9 bits (38),  Expect = 0.94, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR +   TQYF
+Sbjct  1   CASRPRDPVTQYF  13
+
+
+> GPGHKARVL_CATSSRGGETQYF
+Length=13
+
+ Score = 17.9 bits (38),  Expect = 0.96, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA+ ++  ETQYF
+Sbjct  1   CATSSRGGETQYF  13
+
+
+> NLVPMVATV_CSLRSQGTDTQYF
+Length=13
+
+ Score = 17.9 bits (38),  Expect = 1.0, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           C+ R+Q  +TQYF
+Sbjct  1   CSLRSQGTDTQYF  13
+
+
+> NLVPMVATV_CASSLTGQETQYFGP
+Length=15
+
+ Score = 17.6 bits (37),  Expect = 1.1, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSLTGQETQYF  13
+
+
+> RAKFKQLL_CASSVLAGDTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.3, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSVLAGDTQYF  13
+
+
+> HPVGEADYFEY_CASREKGYDEQFF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.3, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR + ++ Q+F
+Sbjct  1   CASREKGYDEQFF  13
+
+
+> NLVPMVATV_CASSPGTEETQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.3, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSPGTEETQYF  13
+
+
+> GPGMKARVL_CASSQETGDTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.3, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  +TQYF
+Sbjct  1   CASSQETGDTQYF  13
+
+
+> APQPELPYPQPG_CASSVRSTDTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  +TQYF
+Sbjct  1   CASSVRSTDTQYF  13
+
+
+> GILGFVFTL_CASSIRSADTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  +TQYF
+Sbjct  1   CASSIRSADTQYF  13
+
+
+> CTPYDINQM_CASSRTGGRETQYF
+Length=14
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 10/14 (71%), Positives = 10/14 (71%), Gaps = 1/14 (7%)
+
+Query  1   CAS-RTQRWETQYF  13
+           CAS RT   ETQYF
+Sbjct  1   CASSRTGGRETQYF  14
+
+
+> PKYVKQNTLKLAT_CASTLDRDGTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   R  TQYF
+Sbjct  1   CASTLDRDGTQYF  13
+
+
+> GLCTLVAML_CASSPLMGDTQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSPLMGDTQYF  13
+
+
+> QPLALEGSLQKRG_CASRPRRDNEQFF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR +R   Q+F
+Sbjct  1   CASRPRRDNEQFF  13
+
+
+> ISPRTLNAW_CASSLGLDETQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.5, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSLGLDETQYF  13
+
+
+> LPPIVAKEI_CASSSKDGQSQYF
+Length=13
+
+ Score = 17.6 bits (37),  Expect = 1.5, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS ++  ++QYF
+Sbjct  1   CASSSKDGQSQYF  13
+
+
+> GLCTLVAML_CASSFGQQETQYF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.6, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   + ETQYF
+Sbjct  1   CASSFGQQETQYF  13
+
+
+> GILGFVFTL_CASSIRSTDTQYF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.6, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  +TQYF
+Sbjct  1   CASSIRSTDTQYF  13
+
+
+> IIKDYGKQM_CASRTSGGHEQFF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.6, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT     Q+F
+Sbjct  1   CASRTSGGHEQFF  13
+
+
+> HPVGEADYFEY_CASSPRRYNLQFF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.6, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +R+  Q+F
+Sbjct  1   CASSPRRYNLQFF  13
+
+
+> LPPIVAKEI_CASRDGQGHEQYF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.7, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR  +   QYF
+Sbjct  1   CASRDGQGHEQYF  13
+
+
+> CTPYDINQM_CASSNRRYNEQFF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.7, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +R+  Q+F
+Sbjct  1   CASSNRRYNEQFF  13
+
+
+> PKYVKQNTLKLAT_CASSRTGSTDTQYF
+Length=14
+
+ Score = 17.3 bits (36),  Expect = 1.8, Method: Compositional matrix adjust.
+ Identities = 9/14 (64%), Positives = 10/14 (71%), Gaps = 1/14 (7%)
+
+Query  1   CAS-RTQRWETQYF  13
+           CAS RT   +TQYF
+Sbjct  1   CASSRTGSTDTQYF  14
+
+
+> EPLPQGQLTAY_CASRSPGYNEQFF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.8, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR+  +  Q+F
+Sbjct  1   CASRSPGYNEQFF  13
+
+
+> NLVPMVATV_CASSLAGADTQYF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 1.8, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSLAGADTQYF  13
+
+
+> KRWIIMGLNK_CASSPGVADTQYF
+Length=13
+
+ Score = 17.3 bits (36),  Expect = 2.0, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSPGVADTQYF  13
+
+
+> NLVPMVATV_CASSPHQAGTQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.0, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   +  TQYF
+Sbjct  1   CASSPHQAGTQYF  13
+
+
+> GILGFVFTL_CASSIISTDTQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.1, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSIISTDTQYF  13
+
+
+> LPPIVAKEI_CASRDRQSHEQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.1, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR ++   QYF
+Sbjct  1   CASRDRQSHEQYF  13
+
+
+> HPVGEADYFEY_CASSPRRYNEQFF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +R+  Q+F
+Sbjct  1   CASSPRRYNEQFF  13
+
+
+> ILKEPVHGV_CAISGDGGETQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.2, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA      ETQYF
+Sbjct  1   CAISGDGGETQYF  13
+
+
+> FPRPWLHGL_CASSLERSSEQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.3, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +R   QYF
+Sbjct  1   CASSLERSSEQYF  13
+
+
+> KRWIILGLNK_CASSQGQLNTQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.3, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   +  TQYF
+Sbjct  1   CASSQGQLNTQYF  13
+
+
+> TTPESANL_CASSQERWGLSNQPQYF
+Length=17
+
+ Score = 16.7 bits (34),  Expect = 2.3, Method: Compositional matrix adjust.
+ Identities = 8/17 (47%), Positives = 10/17 (59%), Gaps = 4/17 (24%)
+
+Query  1   CASRTQRW----ETQYF  13
+           CAS  +RW    + QYF
+Sbjct  1   CASSQERWGLSNQPQYF  17
+
+
+> TTPESANL_CASSQDRWGTSNQPQYF
+Length=17
+
+ Score = 16.7 bits (34),  Expect = 2.4, Method: Compositional matrix adjust.
+ Identities = 9/17 (53%), Positives = 9/17 (53%), Gaps = 4/17 (24%)
+
+Query  1   CASRTQRWET----QYF  13
+           CAS   RW T    QYF
+Sbjct  1   CASSQDRWGTSNQPQYF  17
+
+
+> CTPYDINQM_CASSLGVGKTQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSLGVGKTQYF  13
+
+
+> GILGFVFTL_CASSIRSSHTQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.5, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +   TQYF
+Sbjct  1   CASSIRSSHTQYF  13
+
+
+> FLRGRAYGL_CASGQGNFDIQYF
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 2.5, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS    ++ QYF
+Sbjct  1   CASGQGNFDIQYF  13
+
+
+> CTPYDINQM_CASGRYRVATQYF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 2.6, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   R  TQYF
+Sbjct  1   CASGRYRVATQYF  13
+
+
+> ILKEPVHGV_CAISEDGGETQYF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 3.0, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA      ETQYF
+Sbjct  1   CAISEDGGETQYF  13
+
+
+> GLCTLVAML_CASSAWLVETQYF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 3.0, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSAWLVETQYF  13
+
+
+> RPRGEVRFL_CASSTDSVDEQFF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 3.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS T   + Q+F
+Sbjct  1   CASSTDSVDEQFF  13
+
+
+> QASQEVKNW_CASSKGRYNEQFF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 3.2, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   R+  Q+F
+Sbjct  1   CASSKGRYNEQFF  13
+
+
+> IIKDYGKQM_CASRTSGDYEQYF
+Length=13
+
+ Score = 16.7 bits (34),  Expect = 3.2, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASRT     QYF
+Sbjct  1   CASRTSGDYEQYF  13
+
+
+> RAKFKQLL_CSTGTGEGGTQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.3, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           C++ T    TQYF
+Sbjct  1   CSTGTGEGGTQYF  13
+
+
+> GPGMKARVL_CASSLELGDEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.4, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  + QYF
+Sbjct  1   CASSLELGDEQYF  13
+
+
+> KRWIILGLNK_CASSQGTTDTQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.5, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSQGTTDTQYF  13
+
+
+> KLVALGINAV_CASTQGSTDTQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.5, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASTQGSTDTQYF  13
+
+
+> CTPYDINQM_CASSSEGNQPQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.6, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS ++  + QYF
+Sbjct  1   CASSSEGNQPQYF  13
+
+
+> TTPESANL_CASRPGLGREQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.7, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      QYF
+Sbjct  1   CASRPGLGREQYF  13
+
+
+> LPPIVAKEI_CASSSRQGKEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.8, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 10/13 (77%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS +++ + QYF
+Sbjct  1   CASSSRQGKEQYF  13
+
+
+> ISPRTLNAW_CASRSPLGYEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.8, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR+     QYF
+Sbjct  1   CASRSPLGYEQYF  13
+
+
+> KLVALGINAV_CASSSSWADTQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.8, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS +   +TQYF
+Sbjct  1   CASSSSWADTQYF  13
+
+
+> GLCTLVAML_CASSQSPGGTQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.9, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS      TQYF
+Sbjct  1   CASSQSPGGTQYF  13
+
+
+> IIKDYGKQM_CASRGTGVHEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 3.9, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      QYF
+Sbjct  1   CASRGTGVHEQYF  13
+
+
+> EPLPQGQLTAY_CASRPPGGNEQFF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.0, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      Q+F
+Sbjct  1   CASRPPGGNEQFF  13
+
+
+> QPFPQPELPYP_CSAGVGGQETQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.0, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           C++     ETQYF
+Sbjct  1   CSAGVGGQETQYF  13
+
+
+> GPGMKARVL_CASSLETGDEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  + QYF
+Sbjct  1   CASSLETGDEQYF  13
+
+
+> CTPYDINQM_CASKDRGNQPQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS+ +  + QYF
+Sbjct  1   CASKDRGNQPQYF  13
+
+
+> FPRPWLHGL_CASSLWDQETQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.1, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSLWDQETQYF  13
+
+
+> GLCTLVAML_CASSVAGGDEQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     + QYF
+Sbjct  1   CASSVAGGDEQYF  13
+
+
+> GPGHKARVL_CATGRLAGETQYF
+Length=13
+
+ Score = 16.5 bits (33),  Expect = 4.1, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA+     ETQYF
+Sbjct  1   CATGRLAGETQYF  13
+
+
+> RAKFKQLL_CATKRTGTDTQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.2, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CA++    +TQYF
+Sbjct  1   CATKRTGTDTQYF  13
+
+
+> SLYNTVATL_CSAPVLPQETQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.3, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           C++     ETQYF
+Sbjct  1   CSAPVLPQETQYF  13
+
+
+> CTPYDINQM_CASSPPRRGEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.5, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   R   QYF
+Sbjct  1   CASSPPRRGEQYF  13
+
+
+> CTPYDINQM_CASSDRDSDPQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.5, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  + QYF
+Sbjct  1   CASSDRDSDPQYF  13
+
+
+> ELAGIGLTV_CASSQDGGVTQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.5, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS      TQYF
+Sbjct  1   CASSQDGGVTQYF  13
+
+
+> LPPIVAKEI_CASSSRDGQEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.7, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS ++  + QYF
+Sbjct  1   CASSSRDGQEQYF  13
+
+
+> TTPESANL_CASSSQRNSNQPQYF
+Length=15
+
+ Score = 16.2 bits (32),  Expect = 4.7, Method: Compositional matrix adjust.
+ Identities = 8/15 (53%), Positives = 10/15 (67%), Gaps = 2/15 (13%)
+
+Query  1   CASRTQR--WETQYF  13
+           CAS +QR   + QYF
+Sbjct  1   CASSSQRNSNQPQYF  15
+
+
+> LPPIVAKEI_CASSSRGGQEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 4.9, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS ++  + QYF
+Sbjct  1   CASSSRGGQEQYF  13
+
+
+> LPPIVAKEI_CASSPRQGQEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.0, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  ++ + QYF
+Sbjct  1   CASSPRQGQEQYF  13
+
+
+> TTPESANL_CASSIGGFETEAFF
+Length=14
+
+ Score = 16.2 bits (32),  Expect = 5.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS    +ET+ F
+Sbjct  1   CASSIGGFETEAF  13
+
+
+> GPGMKARVL_CASSQETGDEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.2, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  + QYF
+Sbjct  1   CASSQETGDEQYF  13
+
+
+> LPPIVAKEI_CASSPGQGQEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.2, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   + + QYF
+Sbjct  1   CASSPGQGQEQYF  13
+
+
+> EPLPQGQLTAY_CASRPPGVYEQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.2, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      QYF
+Sbjct  1   CASRPPGVYEQYF  13
+
+
+> RAKFKQLL_CASSLWIQETQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.3, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ETQYF
+Sbjct  1   CASSLWIQETQYF  13
+
+
+> APQPELPYPQPGS_CASSFRFTDTQYF
+Length=13
+
+ Score = 16.2 bits (32),  Expect = 5.3, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  +TQYF
+Sbjct  1   CASSFRFTDTQYF  13
+
+
+> CVETMCNEY_CASSLARNQPQHF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 5.7, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS   R + Q+F
+Sbjct  1   CASSLARNQPQHF  13
+
+
+> NLVPMVATV_CASRLGLGYEQYF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 5.8, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      QYF
+Sbjct  1   CASRLGLGYEQYF  13
+
+
+> RPRGEVRFL_CASSVWGTDTQYF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 5.8, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     +TQYF
+Sbjct  1   CASSVWGTDTQYF  13
+
+
+> VLEETSVML_CASKWGRDLWQPQHF
+Length=15
+
+ Score = 15.9 bits (31),  Expect = 6.0, Method: Compositional matrix adjust.
+ Identities = 7/15 (47%), Positives = 10/15 (67%), Gaps = 2/15 (13%)
+
+Query  1   CASRTQR--WETQYF  13
+           CAS+  R  W+ Q+F
+Sbjct  1   CASKWGRDLWQPQHF  15
+
+
+> LPPIVAKEI_CASSPRQGHEQYF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 6.1, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  ++   QYF
+Sbjct  1   CASSPRQGHEQYF  13
+
+
+> NLVPMVATV_CASSLVGTGGWDEQFF
+Length=16
+
+ Score = 15.9 bits (31),  Expect = 6.2, Method: Compositional matrix adjust.
+ Identities = 7/16 (44%), Positives = 9/16 (56%), Gaps = 3/16 (19%)
+
+Query  1   CASR---TQRWETQYF  13
+           CAS    T  W+ Q+F
+Sbjct  1   CASSLVGTGGWDEQFF  16
+
+
+> FPRPWLHGL_CASSIKGYNEQFF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 6.3, Method: Compositional matrix adjust.
+ Identities = 5/13 (38%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  + +  Q+F
+Sbjct  1   CASSIKGYNEQFF  13
+
+
+> IIKDYGKQM_CASRGSGVYEQYF
+Length=13
+
+ Score = 15.9 bits (31),  Expect = 6.4, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CASR      QYF
+Sbjct  1   CASRGSGVYEQYF  13
+
+
+> HPKVSSEVHI_CASSQEGWDGRYEQYF
+Length=16
+
+ Score = 15.6 bits (30),  Expect = 6.7, Method: Compositional matrix adjust.
+ Identities = 5/12 (42%), Positives = 8/12 (67%), Gaps = 0/12 (0%)
+
+Query  1   CASRTQRWETQY  12
+           CAS  + W+ +Y
+Sbjct  1   CASSQEGWDGRY  12
+
+
+> PKYVKQNTLKLAT_CASSVAGGETEAFF
+Length=14
+
+ Score = 15.6 bits (30),  Expect = 6.8, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     ET+ F
+Sbjct  1   CASSVAGGETEAF  13
+
+
+> GLCTLVAML_CASSLGTGDEQYF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 7.0, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     + QYF
+Sbjct  1   CASSLGTGDEQYF  13
+
+
+> CTPYDINQM_CASSLDSNQPQYF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 7.0, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     + QYF
+Sbjct  1   CASSLDSNQPQYF  13
+
+
+> FLRGRAYGL_CASSTGQAYEQYF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 7.1, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS T +   QYF
+Sbjct  1   CASSTGQAYEQYF  13
+
+
+> GPGMKARVL_CASSLELGDEQFF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 7.4, Method: Compositional matrix adjust.
+ Identities = 5/13 (38%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  +  + Q+F
+Sbjct  1   CASSLELGDEQFF  13
+
+
+> NLVPMVATV_CASSFGQAWYEQYF
+Length=14
+
+ Score = 15.6 bits (30),  Expect = 7.5, Method: Compositional matrix adjust.
+ Identities = 8/14 (57%), Positives = 8/14 (57%), Gaps = 1/14 (7%)
+
+Query  1   CASR-TQRWETQYF  13
+           CAS   Q W  QYF
+Sbjct  1   CASSFGQAWYEQYF  14
+
+
+> GPGHKARVL_CASSQDGVYTQYF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 7.6, Method: Compositional matrix adjust.
+ Identities = 7/13 (54%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS      TQYF
+Sbjct  1   CASSQDGVYTQYF  13
+
+
+> EPLPQGQLTAY_CASSFYDWNTEAFF
+Length=14
+
+ Score = 15.6 bits (30),  Expect = 7.6, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS    W T+ F
+Sbjct  1   CASSFYDWNTEAF  13
+
+
+> KRWIILGLNK_CSARVTSSDEQYF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 8.3, Method: Compositional matrix adjust.
+ Identities = 5/13 (38%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           C++R    + QYF
+Sbjct  1   CSARVTSSDEQYF  13
+
+
+> GLNKIVRMY_CASSLQGAPEQFF
+Length=13
+
+ Score = 15.6 bits (30),  Expect = 8.7, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS  Q    Q+F
+Sbjct  1   CASSLQGAPEQFF  13
+
+
+> RAKFKQLL_CASSPYGIDEQYF
+Length=13
+
+ Score = 15.3 bits (29),  Expect = 8.9, Method: Compositional matrix adjust.
+ Identities = 6/13 (46%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     + QYF
+Sbjct  1   CASSPYGIDEQYF  13
+
+
+> GLCTLVAML_CASSVAGGDEQFF
+Length=13
+
+ Score = 15.3 bits (29),  Expect = 9.2, Method: Compositional matrix adjust.
+ Identities = 5/13 (38%), Positives = 7/13 (54%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS     + Q+F
+Sbjct  1   CASSVAGGDEQFF  13
+
+
+> SLYNTVATL_CASSGVGYQPQHF
+Length=13
+
+ Score = 15.3 bits (29),  Expect = 9.7, Method: Compositional matrix adjust.
+ Identities = 5/13 (38%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+
+Query  1   CASRTQRWETQYF  13
+           CAS    ++ Q+F
+Sbjct  1   CASSGVGYQPQHF  13
+
+
+
+Lambda      K        H        a         alpha
+   0.327    0.125    0.475    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 671242
+
+
+  Database: User specified sequence set (Input: trb_sequences_all).
+    Posted date:  Unknown
+  Number of letters in database: 51,634
+  Number of sequences in database:  3,534
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 9, Extension: 1
+Neighboring words threshold: 11
+Window for multiple hits: 40

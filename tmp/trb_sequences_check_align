@@ -1,0 +1,504 @@
+BLASTP 2.5.0+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+Reference for composition-based statistics: Alejandro A. Schaffer,
+L. Aravind, Thomas L. Madden, Sergei Shavirin, John L. Spouge, Yuri
+I. Wolf, Eugene V. Koonin, and Stephen F. Altschul (2001),
+"Improving the accuracy of PSI-BLAST protein database searches with
+composition-based statistics and other refinements", Nucleic Acids
+Res. 29:2994-3005.
+
+
+
+Database: User specified sequence set (Input: trb_sequences_YPLHEQHGM_12).
+           12 sequences; 170 total letters
+
+
+
+Query= CASSFSPTAQGLEQYF
+
+Length=16
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSFSPTAQGLEQYF                                                    30.4    3e-08
+  CASSVELGSGRETQYF                                                    13.8    0.27 
+
+
+Length=16
+
+ Score = 30.4 bits (80),  Expect = 3e-08, Method: Compositional matrix adjust.
+ Identities = 16/16 (100%), Positives = 16/16 (100%), Gaps = 0/16 (0%)
+
+Query  1   CASSFSPTAQGLEQYF  16
+           CASSFSPTAQGLEQYF
+Sbjct  1   CASSFSPTAQGLEQYF  16
+
+
+Length=16
+
+ Score = 13.8 bits (24),  Expect = 0.27, Method: Compositional matrix adjust.
+ Identities = 7/16 (44%), Positives = 8/16 (50%), Gaps = 0/16 (0%)
+
+Query  1   CASSFSPTAQGLEQYF  16
+           CASS    +    QYF
+Sbjct  1   CASSVELGSGRETQYF  16
+
+
+
+Lambda      K        H        a         alpha
+   0.318    0.126    0.389    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2720
+
+
+Query= CASSQGALTGQPQHF
+
+Length=15
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSQGALTGQPQHF                                                     28.9    1e-07
+  CASSELTGGPYEQYF                                                     13.8    0.30 
+
+
+Length=15
+
+ Score = 28.9 bits (75),  Expect = 1e-07, Method: Compositional matrix adjust.
+ Identities = 15/15 (100%), Positives = 15/15 (100%), Gaps = 0/15 (0%)
+
+Query  1   CASSQGALTGQPQHF  15
+           CASSQGALTGQPQHF
+Sbjct  1   CASSQGALTGQPQHF  15
+
+
+Length=15
+
+ Score = 13.8 bits (24),  Expect = 0.30, Method: Compositional matrix adjust.
+ Identities = 9/17 (53%), Positives = 11/17 (65%), Gaps = 4/17 (24%)
+
+Query  1   CASSQGALTGQP--QHF  15
+           CASS+   TG P  Q+F
+Sbjct  1   CASSEL--TGGPYEQYF  15
+
+
+
+Lambda      K        H        a         alpha
+   0.317    0.126    0.403    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2550
+
+
+Query= CASSIQDSLYNEQFF
+
+Length=15
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSIQDSLYNEQFF                                                     28.9    1e-07
+  CASSELTGGPYEQYF                                                     14.1    0.25 
+
+
+Length=15
+
+ Score = 28.9 bits (75),  Expect = 1e-07, Method: Compositional matrix adjust.
+ Identities = 15/15 (100%), Positives = 15/15 (100%), Gaps = 0/15 (0%)
+
+Query  1   CASSIQDSLYNEQFF  15
+           CASSIQDSLYNEQFF
+Sbjct  1   CASSIQDSLYNEQFF  15
+
+
+Length=15
+
+ Score = 14.1 bits (25),  Expect = 0.25, Method: Compositional matrix adjust.
+ Identities = 7/15 (47%), Positives = 8/15 (53%), Gaps = 0/15 (0%)
+
+Query  1   CASSIQDSLYNEQFF  15
+           CASS       EQ+F
+Sbjct  1   CASSELTGGPYEQYF  15
+
+
+
+Lambda      K        H        a         alpha
+   0.323    0.130    0.387    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2550
+
+
+Query= CASSDSSLTEAFF
+
+Length=13
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSDSSLTEAFF                                                       23.9    1e-05
+
+
+Length=13
+
+ Score = 23.9 bits (58),  Expect = 1e-05, Method: Compositional matrix adjust.
+ Identities = 13/13 (100%), Positives = 13/13 (100%), Gaps = 0/13 (0%)
+
+Query  1   CASSDSSLTEAFF  13
+           CASSDSSLTEAFF
+Sbjct  1   CASSDSSLTEAFF  13
+
+
+
+Lambda      K        H        a         alpha
+   0.316    0.118    0.333    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2210
+
+
+Query= CASSLRTTNEKLFF
+
+Length=14
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSLRTTNEKLFF                                                      26.9    9e-07
+  CASSLRTLDGYTF                                                       17.0    0.007
+
+
+Length=14
+
+ Score = 26.9 bits (68),  Expect = 9e-07, Method: Compositional matrix adjust.
+ Identities = 14/14 (100%), Positives = 14/14 (100%), Gaps = 0/14 (0%)
+
+Query  1   CASSLRTTNEKLFF  14
+           CASSLRTTNEKLFF
+Sbjct  1   CASSLRTTNEKLFF  14
+
+
+Length=13
+
+ Score = 17.0 bits (35),  Expect = 0.007, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASSLRTTNEKLF  13
+           CASSLRT +   F
+Sbjct  1   CASSLRTLDGYTF  13
+
+
+
+Lambda      K        H        a         alpha
+   0.326    0.129    0.381    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2380
+
+
+Query= CSANTGGTYEQYF
+
+Length=13
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CSANTGGTYEQYF                                                       26.6    1e-06
+  CASSELTGGPYEQYF                                                     19.1    0.001
+
+
+Length=13
+
+ Score = 26.6 bits (67),  Expect = 1e-06, Method: Compositional matrix adjust.
+ Identities = 13/13 (100%), Positives = 13/13 (100%), Gaps = 0/13 (0%)
+
+Query  1   CSANTGGTYEQYF  13
+           CSANTGGTYEQYF
+Sbjct  1   CSANTGGTYEQYF  13
+
+
+Length=15
+
+ Score = 19.1 bits (42),  Expect = 0.001, Method: Compositional matrix adjust.
+ Identities = 9/12 (75%), Positives = 9/12 (75%), Gaps = 0/12 (0%)
+
+Query  2   SANTGGTYEQYF  13
+           S  TGG YEQYF
+Sbjct  4   SELTGGPYEQYF  15
+
+
+
+Lambda      K        H        a         alpha
+   0.315    0.131    0.428    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2210
+
+
+Query= CSAPEVRGVWGYTF
+
+Length=14
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CSAPEVRGVWGYTF                                                      29.2    1e-07
+
+
+Length=14
+
+ Score = 29.2 bits (76),  Expect = 1e-07, Method: Compositional matrix adjust.
+ Identities = 14/14 (100%), Positives = 14/14 (100%), Gaps = 0/14 (0%)
+
+Query  1   CSAPEVRGVWGYTF  14
+           CSAPEVRGVWGYTF
+Sbjct  1   CSAPEVRGVWGYTF  14
+
+
+
+Lambda      K        H        a         alpha
+   0.325    0.142    0.551    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2380
+
+
+Query= CSVEEVEAFF
+
+Length=10
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CSVEEVEAFF                                                          20.0    5e-04
+
+
+Length=10
+
+ Score = 20.0 bits (45),  Expect = 5e-04, Method: Compositional matrix adjust.
+ Identities = 10/10 (100%), Positives = 10/10 (100%), Gaps = 0/10 (0%)
+
+Query  1  CSVEEVEAFF  10
+          CSVEEVEAFF
+Sbjct  1  CSVEEVEAFF  10
+
+
+
+Lambda      K        H        a         alpha
+   0.327    0.136    0.410    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 1700
+
+
+Query= CASSLASSGYTGELFF
+
+Length=16
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSLASSGYTGELFF                                                    28.6    1e-07
+
+
+Length=16
+
+ Score = 28.6 bits (74),  Expect = 1e-07, Method: Compositional matrix adjust.
+ Identities = 16/16 (100%), Positives = 16/16 (100%), Gaps = 0/16 (0%)
+
+Query  1   CASSLASSGYTGELFF  16
+           CASSLASSGYTGELFF
+Sbjct  1   CASSLASSGYTGELFF  16
+
+
+
+Lambda      K        H        a         alpha
+   0.319    0.130    0.387    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2720
+
+
+Query= CASSLRTLDGYTF
+
+Length=13
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSLRTLDGYTF                                                       26.0    2e-06
+  CASSLRTTNEKLFF                                                      17.0    0.007
+
+
+Length=13
+
+ Score = 26.0 bits (65),  Expect = 2e-06, Method: Compositional matrix adjust.
+ Identities = 13/13 (100%), Positives = 13/13 (100%), Gaps = 0/13 (0%)
+
+Query  1   CASSLRTLDGYTF  13
+           CASSLRTLDGYTF
+Sbjct  1   CASSLRTLDGYTF  13
+
+
+Length=14
+
+ Score = 17.0 bits (35),  Expect = 0.007, Method: Compositional matrix adjust.
+ Identities = 8/13 (62%), Positives = 9/13 (69%), Gaps = 0/13 (0%)
+
+Query  1   CASSLRTLDGYTF  13
+           CASSLRT +   F
+Sbjct  1   CASSLRTTNEKLF  13
+
+
+
+Lambda      K        H        a         alpha
+   0.326    0.136    0.428    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2210
+
+
+Query= CASSVELGSGRETQYF
+
+Length=16
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSVELGSGRETQYF                                                    30.4    3e-08
+  CASSFSPTAQGLEQYF                                                    13.8    0.27 
+
+
+Length=16
+
+ Score = 30.4 bits (80),  Expect = 3e-08, Method: Compositional matrix adjust.
+ Identities = 16/16 (100%), Positives = 16/16 (100%), Gaps = 0/16 (0%)
+
+Query  1   CASSVELGSGRETQYF  16
+           CASSVELGSGRETQYF
+Sbjct  1   CASSVELGSGRETQYF  16
+
+
+Length=16
+
+ Score = 13.8 bits (24),  Expect = 0.27, Method: Compositional matrix adjust.
+ Identities = 7/16 (44%), Positives = 8/16 (50%), Gaps = 0/16 (0%)
+
+Query  1   CASSVELGSGRETQYF  16
+           CASS    +    QYF
+Sbjct  1   CASSFSPTAQGLEQYF  16
+
+
+
+Lambda      K        H        a         alpha
+   0.314    0.127    0.370    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2720
+
+
+Query= CASSELTGGPYEQYF
+
+Length=15
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  CASSELTGGPYEQYF                                                     29.5    7e-08
+  CSANTGGTYEQYF                                                       19.1    0.001
+  CASSIQDSLYNEQFF                                                     14.1    0.25 
+  CASSQGALTGQPQHF                                                     13.8    0.30 
+
+
+Length=15
+
+ Score = 29.5 bits (77),  Expect = 7e-08, Method: Compositional matrix adjust.
+ Identities = 15/15 (100%), Positives = 15/15 (100%), Gaps = 0/15 (0%)
+
+Query  1   CASSELTGGPYEQYF  15
+           CASSELTGGPYEQYF
+Sbjct  1   CASSELTGGPYEQYF  15
+
+
+Length=13
+
+ Score = 19.1 bits (42),  Expect = 0.001, Method: Compositional matrix adjust.
+ Identities = 9/12 (75%), Positives = 9/12 (75%), Gaps = 0/12 (0%)
+
+Query  4   SELTGGPYEQYF  15
+           S  TGG YEQYF
+Sbjct  2   SANTGGTYEQYF  13
+
+
+Length=15
+
+ Score = 14.1 bits (25),  Expect = 0.25, Method: Compositional matrix adjust.
+ Identities = 7/15 (47%), Positives = 8/15 (53%), Gaps = 0/15 (0%)
+
+Query  1   CASSELTGGPYEQYF  15
+           CASS       EQ+F
+Sbjct  1   CASSIQDSLYNEQFF  15
+
+
+Length=15
+
+ Score = 13.8 bits (24),  Expect = 0.30, Method: Compositional matrix adjust.
+ Identities = 9/17 (53%), Positives = 11/17 (65%), Gaps = 4/17 (24%)
+
+Query  1   CASSEL--TGGPYEQYF  15
+           CASS+   TG P  Q+F
+Sbjct  1   CASSQGALTGQP--QHF  15
+
+
+
+Lambda      K        H        a         alpha
+   0.314    0.134    0.427    0.792     4.96 
+
+Gapped
+Lambda      K        H        a         alpha    sigma
+   0.206   0.0100   0.0520     4.00     210.     215. 
+
+Effective search space used: 2550
+
+
+  Database: User specified sequence set (Input: trb_sequences_YPLHEQHGM_12).
+    Posted date:  Unknown
+  Number of letters in database: 170
+  Number of sequences in database:  12
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 9, Extension: 1
+Neighboring words threshold: 11
+Window for multiple hits: 40

@@ -1,0 +1,101 @@
+---
+title: "ch VDJdb distances between superimposed sequences"
+output:
+  html_document: default
+  pdf_document:
+    keep_tex: yes
+    latex_engine: xelatex
+header-includes:
+- \usepackage{amsmath,amsthm,amssymb}
+- \usepackage{mathtext}
+- \usepackage[T1,T2A]{fontenc}
+- \usepackage[utf8]{inputenc}
+- \usepackage[english,russian]{babel}
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Open file with B_CDR3 distances and create plots:
+```{r}
+library(reshape2)
+library(ggplot2)
+library(gplots)
+library(plyr)
+library(MASS)
+library(stringr)
+
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Bcdr_3.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+plot_imp <- function(imp_dataset) {
+  plt <- ggplot(imp_dataset, aes(x=X.1, y=X.2, fill=distance)) +
+    geom_tile(data=imp_dataset, 
+                   aes(x=X.1, y=X.2, fill=distance), size=2) +
+    #geom_tile(data=subset(imp_dataset, distance <= 6), 
+    #               aes(x=X.1, y=X.2), size=1, color="black", fill=NA) +
+    geom_label(aes(label=paste(AA1, AA2, sep=" ")),size=1.5) +
+    scale_fill_gradient2("Distance, A", limits=c(0,18), midpoint = 9,
+                       low="#d73027",mid="#e0f3f8",high="#4575b4") +
+    labs(title=paste("PDB1: ",imp_dataset$pdb1,"; PDB2: ", imp_dataset$pdb2, sep=""),x=paste(paste("Position in", imp_dataset$pdb1, sep=" "), imp_dataset$pdb1seq, paste(nchar(imp_dataset$pdb1seq[1]), "aminoacids", sep=" "), sep="\n"), y=paste(paste("Position in", imp_dataset$pdb2, sep=" "),imp_dataset$pdb2seq, paste(nchar(imp_dataset$pdb2seq[1]), "aminoacids", sep=" "), sep="\n"))
+  print(plt)
+}
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+#nothing
+```
+
+Open file with A_CDR3 distances and create plots:
+
+```{r}
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Acdr_3.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+```
+
+Open file with B_CDR2 distances and create plots:
+```{r}
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Bcdr_2.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+```
+
+Open file with A_CDR2 distances and create plots:
+```{r}
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Acdr_2.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+```
+
+Open file with B_CDR1 distances and create plots:
+```{r}
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Bcdr_1.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+```
+
+Open file with A_CDR1 distances and create plots:
+```{r}
+df <- read.csv('seqdata/HomoSapiens/distances_from_pdb_test_Acdr_1.txt', stringsAsFactors = FALSE, sep='\t')
+df$dataset <- paste(df$pdb1, df$pdb2, sep = "_")
+df.2 <- split(df, f=df$dataset)
+for (i in df.2) {
+  plot_imp(i)
+}
+```
