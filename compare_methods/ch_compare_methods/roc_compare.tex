@@ -1,0 +1,458 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={roc compare},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{{#1}}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{roc compare}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{}
+  \preauthor{}\postauthor{}
+  \date{}
+  \predate{}\postdate{}
+
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtext}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pROC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Type 'citation("pROC")' for a citation.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'pROC'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     cov, smooth, var
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(reshape2)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(grid)}
+\KeywordTok{library}\NormalTok{(data.table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'data.table'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:reshape2':
+## 
+##     dcast, melt
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     between, first, last
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "/home/AlekseyYeliseev/AdaptiveImm/ch_scripts/ch_compare_methods"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{script.dir <-}\StringTok{ "/home/AlekseyYeliseev/AdaptiveImm/ch_scripts/ch_compare_methods"}
+\NormalTok{nbrdist_percentiles =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{25}\NormalTok{)}
+\NormalTok{tcr_distances =}\StringTok{ }\KeywordTok{data.table}\NormalTok{(}\KeywordTok{read.table}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(script.dir, }\StringTok{'../../imgt_work/dists/vdjdb_imgted_filtered_HomoSapiens_AB_nbrdists.tsv'}\NormalTok{), }\DataTypeTok{sep=}\StringTok{'}\CharTok{\textbackslash{}t}\StringTok{'}\NormalTok{, }\DataTypeTok{header=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{random_tcr_distances =}\StringTok{ }\KeywordTok{data.table}\NormalTok{(}\KeywordTok{read.table}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(script.dir, }\StringTok{'../../imgt_work/random_tcr_distances/vdjdb_imgted_filtered_HomoSapiens_AB_random_nbrdists.tsv'}\NormalTok{), }\DataTypeTok{sep=}\StringTok{'}\CharTok{\textbackslash{}t}\StringTok{'}\NormalTok{, }\DataTypeTok{header=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{nlim =}\StringTok{ }\DecValTok{30}
+\NormalTok{chain =}\StringTok{ 'AB'}
+\NormalTok{ant =}\StringTok{ 'epitope.seq'}
+
+\KeywordTok{names}\NormalTok{(tcr_distances)[}\KeywordTok{which}\NormalTok{(}\KeywordTok{names}\NormalTok{(tcr_distances)==ant)] <-}\StringTok{ 'epitope.work'}
+
+\NormalTok{datainfo =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cdrheader =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'cdr1.alpha'}\NormalTok{, }\StringTok{'cdr2.alpha'}\NormalTok{, }\StringTok{'cdr2.5.alpha'}\NormalTok{, }\StringTok{'cdr3.alpha'}\NormalTok{, }
+            \StringTok{'cdr1.beta'}\NormalTok{, }\StringTok{'cdr2.beta'}\NormalTok{, }\StringTok{'cdr2.5.beta'}\NormalTok{, }\StringTok{'cdr3.beta'}\NormalTok{, }
+            \StringTok{'v.alpha'}\NormalTok{, }\StringTok{'v.beta'}\NormalTok{, }\StringTok{'epitope.seq'}\NormalTok{, }\StringTok{'species'}\NormalTok{)}
+\NormalTok{cdrheader[}\KeywordTok{which}\NormalTok{(cdrheader==ant)] <-}\StringTok{ 'epitope.work'}
+
+\NormalTok{randomheader =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'va_reps'}\NormalTok{, }\StringTok{'vb_reps'}\NormalTok{, }\StringTok{'cdr3a'}\NormalTok{, }\StringTok{'cdr3b'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tcr_dists =}\StringTok{ }\KeywordTok{melt}\NormalTok{(tcr_distances, }\DataTypeTok{id.vars=}\NormalTok{cdrheader, }\DataTypeTok{variable.name =} \StringTok{'dataset'}\NormalTok{, }\DataTypeTok{value.name =} \StringTok{'dist'}\NormalTok{)}
+\NormalTok{cdrdistheader =}\StringTok{ }\NormalTok{cdrheader}
+\NormalTok{cdrdistheader[}\KeywordTok{length}\NormalTok{(cdrheader)+}\DecValTok{1}\NormalTok{] <-}\StringTok{ 'dataset'}
+\NormalTok{cdrdistheader[}\KeywordTok{length}\NormalTok{(cdrheader)+}\DecValTok{2}\NormalTok{] <-}\StringTok{ 'dist'}
+
+\NormalTok{random_dists =}\StringTok{ }\KeywordTok{melt}\NormalTok{(random_tcr_distances, }\DataTypeTok{id.vars=}\NormalTok{randomheader, }\DataTypeTok{variable.name =} \StringTok{'dataset'}\NormalTok{, }\DataTypeTok{value.name=}\StringTok{'dist'}\NormalTok{)}
+\NormalTok{randomdistheader =}\StringTok{ }\NormalTok{randomheader}
+\NormalTok{randomdistheader[}\KeywordTok{length}\NormalTok{(randomheader)+}\DecValTok{1}\NormalTok{] <-}\StringTok{ 'dataset'}
+\NormalTok{randomdistheader[}\KeywordTok{length}\NormalTok{(randomheader)+}\DecValTok{2}\NormalTok{] <-}\StringTok{ 'dist'}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tcr_sums =}\StringTok{ }\NormalTok{tcr_distances  %>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(epitope.work) %>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{tcr_summ =} \KeywordTok{length}\NormalTok{(epitope.work)) %>%}\StringTok{ }\KeywordTok{as.data.table}\NormalTok{()}
+
+\KeywordTok{names}\NormalTok{(tcr_sums) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'epitope.work'}\NormalTok{, }\StringTok{'tcr_summ'}\NormalTok{)}
+\NormalTok{total_sum =}\StringTok{ }\KeywordTok{sum}\NormalTok{(tcr_sums$tcr_summ)}
+
+\NormalTok{epitopes =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{unlist}\NormalTok{(}\KeywordTok{unique}\NormalTok{(tcr_sums[tcr_summ >}\StringTok{ }\NormalTok{nlim, epitope.work])))}
+\NormalTok{all.epitopes =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(}\KeywordTok{unlist}\NormalTok{(}\KeywordTok{unique}\NormalTok{(tcr_sums[,epitope.work])))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{new_cols =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'percentile'}\NormalTok{, }\StringTok{'to_antigen'}\NormalTok{, }\StringTok{'type'}\NormalTok{, }\StringTok{'chains'}\NormalTok{)}
+
+\CommentTok{#for (newcol in new_cols) \{}
+\CommentTok{#  tcr_dists[, newcol] = NULL}
+\CommentTok{#  random_dists[, newcol] = NULL}
+\CommentTok{#  cdrdistheader[length(cdrdistheader)+1] <- newcol}
+\CommentTok{#  randomdistheader[length(randomdistheader)+1] <- newcol}
+\CommentTok{#\}}
+
+\NormalTok{tcr_dists[, epitope.mdfd :}\ErrorTok{=}\StringTok{ 'other'}\NormalTok{]}
+\NormalTok{tcr_dists[epitope.work %in%}\StringTok{ }\NormalTok{epitopes, epitope.mdfd :}\ErrorTok{=}\StringTok{ }\NormalTok{epitope.work]}
+
+\NormalTok{for (nbrdist in nbrdist_percentiles)\{}
+  \NormalTok{for (antig in all.epitopes)\{}
+    \NormalTok{dataset_name =}\StringTok{ }\KeywordTok{paste}\NormalTok{(antig, chain, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"nbrdist"}\NormalTok{, nbrdist), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+    \NormalTok{dataset_wtd_name =}\StringTok{ }\KeywordTok{paste}\NormalTok{(antig, chain, }\StringTok{'wtd'}\NormalTok{, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"nbrdist"}\NormalTok{, nbrdist), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+    
+    \NormalTok{tcr_dists[dataset==dataset_name, percentile :}\ErrorTok{=}\StringTok{ }\NormalTok{nbrdist]}
+    \NormalTok{tcr_dists[dataset==dataset_name, to_antigen :}\ErrorTok{=}\StringTok{ }\NormalTok{antig]}
+    \NormalTok{tcr_dists[dataset==dataset_name, type :}\ErrorTok{=}\StringTok{'default'}\NormalTok{]}
+    \NormalTok{tcr_dists[dataset==dataset_name, chains :}\ErrorTok{=}\StringTok{ }\NormalTok{chain]}
+    
+    \NormalTok{tcr_dists[dataset==dataset_wtd_name, percentile :}\ErrorTok{=}\StringTok{ }\NormalTok{nbrdist]}
+    \NormalTok{tcr_dists[dataset==dataset_wtd_name, to_antigen :}\ErrorTok{=}\StringTok{ }\NormalTok{antig]}
+    \NormalTok{tcr_dists[dataset==dataset_wtd_name, type :}\ErrorTok{=}\StringTok{'wtd'}\NormalTok{]}
+    \NormalTok{tcr_dists[dataset==dataset_wtd_name, chains :}\ErrorTok{=}\StringTok{ }\NormalTok{chain]}
+  \NormalTok{\}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{roc_data =}\StringTok{ }\KeywordTok{data.table}\NormalTok{()}
+
+
+\NormalTok{for (nbrdist in nbrdist_percentiles)\{}
+  \NormalTok{for (antig in epitopes)\{}
+    \NormalTok{tcr_dists[, antig] =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(tcr_dists[, epitope.work] ==}\StringTok{ }\NormalTok{antig)}
+    \NormalTok{random_dists[, antig] =}\StringTok{ }\DecValTok{0}
+    
+    \NormalTok{dataset_name =}\StringTok{ }\KeywordTok{paste}\NormalTok{(antig, chain, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"nbrdist"}\NormalTok{, nbrdist), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+    \NormalTok{dataset_wtd_name =}\StringTok{ }\KeywordTok{paste}\NormalTok{(antig, chain, }\StringTok{'wtd'}\NormalTok{, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"nbrdist"}\NormalTok{, nbrdist), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{)}
+    
+    \NormalTok{info_roc =}\StringTok{ }\KeywordTok{roc}\NormalTok{(tcr_dists[dataset==dataset_name, }\KeywordTok{get}\NormalTok{(antig)],}
+                   \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{unlist}\NormalTok{(tcr_dists[dataset==dataset_name, }
+                                               \StringTok{'dist'}\NormalTok{])), }\DataTypeTok{ci=}\OtherTok{TRUE}\NormalTok{)}
+    
+    \NormalTok{info_wtd_roc =}\StringTok{ }\KeywordTok{roc}\NormalTok{(tcr_dists[dataset==dataset_wtd_name, }\KeywordTok{get}\NormalTok{(antig)],}
+                       \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{unlist}\NormalTok{(tcr_dists[dataset==dataset_wtd_name, }
+                                                   \StringTok{'dist'}\NormalTok{])), }\DataTypeTok{ci=}\OtherTok{TRUE}\NormalTok{)}
+    \NormalTok{roc_data =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(roc_data, }
+                     \KeywordTok{data.table}\NormalTok{(}\DataTypeTok{percentile =} \KeywordTok{c}\NormalTok{(nbrdist), }\DataTypeTok{antigen=}\KeywordTok{c}\NormalTok{(antig),}
+                                \DataTypeTok{specificities =} \NormalTok{info_roc$specificities,}
+                                \DataTypeTok{sensitivities =} \NormalTok{info_roc$sensitivities,}
+                                \DataTypeTok{auc =} \NormalTok{info_roc$auc[}\DecValTok{1}\NormalTok{],}
+                                \DataTypeTok{ci_lower =} \NormalTok{info_roc$ci[}\DecValTok{1}\NormalTok{],}
+                                \DataTypeTok{ci_upper =} \NormalTok{info_roc$ci[}\DecValTok{3}\NormalTok{],}
+                                \DataTypeTok{type =} \StringTok{'default'}\NormalTok{,}
+                                \DataTypeTok{chains =} \NormalTok{chain,}
+                                \DataTypeTok{method =} \StringTok{'tcr_dist'}\NormalTok{))}
+    \NormalTok{roc_data =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(roc_data, }
+                     \KeywordTok{data.table}\NormalTok{(}\DataTypeTok{percentile =} \KeywordTok{c}\NormalTok{(nbrdist), }\DataTypeTok{antigen=}\KeywordTok{c}\NormalTok{(antig),}
+                                \DataTypeTok{specificities =} \NormalTok{info_wtd_roc$specificities,}
+                                \DataTypeTok{sensitivities =} \NormalTok{info_wtd_roc$sensitivities,}
+                                \DataTypeTok{auc =} \NormalTok{info_wtd_roc$auc[}\DecValTok{1}\NormalTok{],}
+                                \DataTypeTok{ci_lower =} \NormalTok{info_wtd_roc$ci[}\DecValTok{1}\NormalTok{],}
+                                \DataTypeTok{ci_upper =} \NormalTok{info_wtd_roc$ci[}\DecValTok{3}\NormalTok{],}
+                                \DataTypeTok{type =} \StringTok{'wtd'}\NormalTok{,}
+                                \DataTypeTok{chains =} \NormalTok{chain,}
+                                \DataTypeTok{method =} \StringTok{'tcr_dist'}\NormalTok{))}
+  \NormalTok{\}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{roc_data2 <-}\StringTok{ }\NormalTok{roc_data[percentile ==}\StringTok{ }\DecValTok{5}\NormalTok{]}
+\NormalTok{roc_data2$labels <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'AUC = '}\NormalTok{, }\KeywordTok{round}\NormalTok{(roc_data2$auc, }\DecValTok{4}\NormalTok{))}
+\NormalTok{roc_data2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(roc_data2$antigen, }\StringTok{' ('}\NormalTok{, roc_data2$labels, }\StringTok{')'}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(roc_data2, }\KeywordTok{aes}\NormalTok{(specificities, sensitivities)) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color=}\NormalTok{epitope.group)) +}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_reverse}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{rev}\NormalTok{(}\KeywordTok{levels}\NormalTok{(roc_data2$specificities))) +}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(~type) +}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"ROC curves for different epitopes"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 5;}
+\CharTok{\textbackslash{}n}\StringTok{task: discriminate TCRs specific for selected epitope from TCRs specific to other epitopes"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{color=}\StringTok{"Epitope sequence"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tcr_dists2 <-}\StringTok{ }\NormalTok{tcr_dists[to_antigen %in%}\StringTok{ }\NormalTok{epitopes &}\StringTok{ }\NormalTok{percentile ==}\StringTok{ }\DecValTok{5}\NormalTok{]}
+\NormalTok{tcr_dists2$labels <-}\StringTok{ }\KeywordTok{ave}\NormalTok{(tcr_dists2$dist, tcr_dists2$epitope.mdfd, tcr_dists2$type, tcr_dists2$to_antigen, }\DataTypeTok{FUN=}\NormalTok{function(x)}\KeywordTok{paste0}\NormalTok{(}\StringTok{'n = '}\NormalTok{, }\KeywordTok{length}\NormalTok{(x)))}
+\NormalTok{tcr_dists2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(tcr_dists2$epitope.mdfd, }\StringTok{' ('}\NormalTok{, tcr_dists2$labels,}\StringTok{')'}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(tcr_dists2, }\KeywordTok{aes}\NormalTok{(dist)) +}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\KeywordTok{factor}\NormalTok{(epitope.group), }\DataTypeTok{y=}\NormalTok{..count..), }\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(type~to_antigen) +}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Density plot of NNdist distribution for different epitope repertoires"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 5"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{fill=}\StringTok{"Epitope sequence"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{"NNdist"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{roc_data2 <-}\StringTok{ }\NormalTok{roc_data[percentile ==}\StringTok{ }\DecValTok{10}\NormalTok{]}
+\NormalTok{roc_data2$labels <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'AUC = '}\NormalTok{, }\KeywordTok{round}\NormalTok{(roc_data2$auc, }\DecValTok{4}\NormalTok{))}
+\NormalTok{roc_data2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(roc_data2$antigen, }\StringTok{' ('}\NormalTok{, roc_data2$labels, }\StringTok{')'}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(roc_data2, }\KeywordTok{aes}\NormalTok{(specificities, sensitivities)) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color=}\NormalTok{epitope.group)) +}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_reverse}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{rev}\NormalTok{(}\KeywordTok{levels}\NormalTok{(roc_data2$specificities))) +}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(~type) +}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"ROC curves for different epitopes"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 10;}
+\CharTok{\textbackslash{}n}\StringTok{task: discriminate TCRs specific for selected epitope from TCRs specific to other epitopes"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{color=}\StringTok{"Epitope sequence"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tcr_dists2 <-}\StringTok{ }\NormalTok{tcr_dists[to_antigen %in%}\StringTok{ }\NormalTok{epitopes &}\StringTok{ }\NormalTok{percentile ==}\StringTok{ }\DecValTok{10}\NormalTok{]}
+\NormalTok{tcr_dists2$labels <-}\StringTok{ }\KeywordTok{ave}\NormalTok{(tcr_dists2$dist, tcr_dists2$epitope.mdfd, tcr_dists2$type, tcr_dists2$to_antigen, }\DataTypeTok{FUN=}\NormalTok{function(x)}\KeywordTok{paste0}\NormalTok{(}\StringTok{'n = '}\NormalTok{, }\KeywordTok{length}\NormalTok{(x)))}
+\NormalTok{tcr_dists2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(tcr_dists2$epitope.mdfd, }\StringTok{' ('}\NormalTok{, tcr_dists2$labels,}\StringTok{')'}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(tcr_dists2, }\KeywordTok{aes}\NormalTok{(dist)) +}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\KeywordTok{factor}\NormalTok{(epitope.group), }\DataTypeTok{y=}\NormalTok{..count..), }\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(type~to_antigen) +}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Density plot of NNdist distribution for different epitope repertoires"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 10"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{fill=}\StringTok{"Epitope sequence"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{"NNdist"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{roc_data2 <-}\StringTok{ }\NormalTok{roc_data[percentile ==}\StringTok{ }\DecValTok{25}\NormalTok{]}
+\NormalTok{roc_data2$labels <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{'AUC = '}\NormalTok{, }\KeywordTok{round}\NormalTok{(roc_data2$auc, }\DecValTok{4}\NormalTok{))}
+\NormalTok{roc_data2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(roc_data2$antigen, }\StringTok{' ('}\NormalTok{, roc_data2$labels, }\StringTok{')'}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(roc_data2, }\KeywordTok{aes}\NormalTok{(specificities, sensitivities)) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color=}\NormalTok{epitope.group)) +}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_reverse}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{rev}\NormalTok{(}\KeywordTok{levels}\NormalTok{(roc_data2$specificities))) +}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(~type) +}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"ROC curves for different epitopes"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 25;}
+\CharTok{\textbackslash{}n}\StringTok{task: discriminate TCRs specific for selected epitope from TCRs specific to other epitopes"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{color=}\StringTok{"Epitope sequence"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tcr_dists2 <-}\StringTok{ }\NormalTok{tcr_dists[to_antigen %in%}\StringTok{ }\NormalTok{epitopes &}\StringTok{ }\NormalTok{percentile ==}\StringTok{ }\DecValTok{25}\NormalTok{]}
+\NormalTok{tcr_dists2$labels <-}\StringTok{ }\KeywordTok{ave}\NormalTok{(tcr_dists2$dist, tcr_dists2$epitope.mdfd, tcr_dists2$type, tcr_dists2$to_antigen, }\DataTypeTok{FUN=}\NormalTok{function(x)}\KeywordTok{paste0}\NormalTok{(}\StringTok{'n = '}\NormalTok{, }\KeywordTok{length}\NormalTok{(x)))}
+\NormalTok{tcr_dists2$epitope.group <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(tcr_dists2$epitope.mdfd, }\StringTok{' ('}\NormalTok{, tcr_dists2$labels,}\StringTok{')'}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(tcr_dists2, }\KeywordTok{aes}\NormalTok{(dist)) +}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\KeywordTok{factor}\NormalTok{(epitope.group), }\DataTypeTok{y=}\NormalTok{..count..), }\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(type~to_antigen) +}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Density plot of NNdist distribution for different epitope repertoires"}\NormalTok{,}
+       \DataTypeTok{subtitle=}\StringTok{"organism: Homo Sapiens; chains: AB; NNdist percentile: 25"}\NormalTok{,}
+       \DataTypeTok{caption=}\StringTok{"Source: vdjdb_filtered"}\NormalTok{,}
+       \DataTypeTok{fill=}\StringTok{"Epitope sequence"}\NormalTok{, }
+       \DataTypeTok{x=}\StringTok{"NNdist"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{roc_compare_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+
+\end{document}

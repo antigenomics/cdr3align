@@ -1,0 +1,245 @@
+
+---
+title: "roc compare"
+output:
+  html_document: default
+  pdf_document:
+    keep_tex: yes
+    latex_engine: xelatex
+header-includes:
+- \usepackage{amsmath,amsthm,amssymb}
+- \usepackage{mathtext}
+- \usepackage[T1,T2A]{fontenc}
+- \usepackage[utf8]{inputenc}
+- \usepackage[english,russian]{babel}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(pROC)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(grid)
+library(data.table)
+```
+
+```{r}
+getwd()
+script.dir <- "/home/AlekseyYeliseev/AdaptiveImm/ch_scripts/ch_compare_methods"
+nbrdist_percentiles = c(5, 10, 25)
+tcr_distances = data.table(read.table(file.path(script.dir, '../../imgt_work/dists/vdjdb_imgted_filtered_HomoSapiens_AB_nbrdists.tsv'), sep='\t', header=TRUE))
+random_tcr_distances = data.table(read.table(file.path(script.dir, '../../imgt_work/random_tcr_distances/vdjdb_imgted_filtered_HomoSapiens_AB_random_nbrdists.tsv'), sep='\t', header=TRUE))
+nlim = 30
+chain = 'AB'
+ant = 'epitope.seq'
+
+names(tcr_distances)[which(names(tcr_distances)==ant)] <- 'epitope.work'
+
+datainfo = data.frame()
+```
+
+```{r}
+cdrheader = c('cdr1.alpha', 'cdr2.alpha', 'cdr2.5.alpha', 'cdr3.alpha', 
+            'cdr1.beta', 'cdr2.beta', 'cdr2.5.beta', 'cdr3.beta', 
+            'v.alpha', 'v.beta', 'epitope.seq', 'species')
+cdrheader[which(cdrheader==ant)] <- 'epitope.work'
+
+randomheader = c('va_reps', 'vb_reps', 'cdr3a', 'cdr3b')
+```
+
+```{r}
+get.tcrdists <- function(w.tcr_distances, w.random_tcr_distances, w.cdrheader, w.randomheader) {
+  tcr_dists = melt(w.tcr_distances, 
+                   id.vars=w.cdrheader, 
+                   variable.name = 'dataset', 
+                   value.name = 'dist')
+  cdrdistheader = w.cdrheader
+  cdrdistheader[length(w.cdrheader)+1] <- 'dataset'
+  cdrdistheader[length(w.cdrheader)+2] <- 'dist'
+  
+  random_dists = melt(w.random_tcr_distances, 
+                      id.vars=w.randomheader, 
+                      variable.name = 'dataset', 
+                      value.name='dist')
+  randomdistheader = w.randomheader
+  randomdistheader[length(w.randomheader)+1] <- 'dataset'
+  randomdistheader[length(w.randomheader)+2] <- 'dist'
+  
+  tcr_sums = w.tcr_distances  %>% group_by(epitope.work) %>% summarise(tcr_summ = length(epitope.work)) %>% as.data.table()
+  
+  names(tcr_sums) <- c('epitope.work', 'tcr_summ')
+  total_sum = sum(tcr_sums$tcr_summ)
+  
+  epitopes = as.character(unlist(unique(tcr_sums[tcr_summ > nlim, epitope.work])))
+  all.epitopes = as.character(unlist(unique(tcr_sums[,epitope.work])))
+  
+  new_cols = c('percentile', 'to_antigen', 'type', 'chains')
+  
+  tcr_dists[, epitope.mdfd := 'other']
+  tcr_dists[epitope.work %in% epitopes, epitope.mdfd := epitope.work]
+  
+  for (nbrdist in nbrdist_percentiles){
+    for (antig in all.epitopes){
+      dataset_name = paste(antig, chain, paste0("nbrdist", nbrdist), sep = "_")
+      dataset_wtd_name = paste(antig, chain, 'wtd', paste0("nbrdist", nbrdist), sep = "_")
+      
+      tcr_dists[dataset==dataset_name, percentile := nbrdist]
+      tcr_dists[dataset==dataset_name, to_antigen := antig]
+      tcr_dists[dataset==dataset_name, type :='default']
+      tcr_dists[dataset==dataset_name, chains := chain]
+      
+      tcr_dists[dataset==dataset_wtd_name, percentile := nbrdist]
+      tcr_dists[dataset==dataset_wtd_name, to_antigen := antig]
+      tcr_dists[dataset==dataset_wtd_name, type :='wtd']
+      tcr_dists[dataset==dataset_wtd_name, chains := chain]
+    }
+  }
+  return( list("tcr_dists" = tcr_dists, 
+               "random_dists" = random_dists, 
+               "epitopes" = epitopes, 
+               "all.epitopes" = all.epitopes, 
+               "tcr_sums" = tcr_sums, 
+               "total_sum" = total_sum, 
+               "cdrdistheader" = cdrdistheader, 
+               "randomdistheader" = randomdistheader))
+}
+
+```
+
+```{r}
+
+get.roc_data <- function(w.tcr_dists, w.random_dists, w.nbrdist_percentiles, w.epitopes, w.chain) {
+  roc_data = data.table()
+
+
+  for (nbrdist in w.nbrdist_percentiles){
+    for (antig in w.epitopes){
+      w.tcr_dists[, antig] = as.numeric(w.tcr_dists[, epitope.work] == antig)
+      w.random_dists[, antig] = 0
+      
+      dataset_name = paste(antig, chain, paste0("nbrdist", nbrdist), sep = "_")
+      dataset_wtd_name = paste(antig, chain, 'wtd', paste0("nbrdist", nbrdist), sep = "_")
+      
+      info_roc = roc(w.tcr_dists[dataset==dataset_name, get(antig)],
+                     as.numeric(unlist(w.tcr_dists[dataset==dataset_name, 
+                                                 'dist'])), ci=TRUE)
+      
+      info_wtd_roc = roc(w.tcr_dists[dataset==dataset_wtd_name, get(antig)],
+                         as.numeric(unlist(w.tcr_dists[dataset==dataset_wtd_name, 
+                                                     'dist'])), ci=TRUE)
+      roc_data = rbind(roc_data, 
+                       data.table(percentile = c(nbrdist), antigen=c(antig),
+                                  specificities = info_roc$specificities,
+                                  sensitivities = info_roc$sensitivities,
+                                  auc = info_roc$auc[1],
+                                  ci_lower = info_roc$ci[1],
+                                  ci_upper = info_roc$ci[3],
+                                  type = 'default',
+                                  chains = w.chain,
+                                  method = 'tcr_dist'))
+      roc_data = rbind(roc_data, 
+                       data.table(percentile = c(nbrdist), antigen=c(antig),
+                                  specificities = info_wtd_roc$specificities,
+                                  sensitivities = info_wtd_roc$sensitivities,
+                                  auc = info_wtd_roc$auc[1],
+                                  ci_lower = info_wtd_roc$ci[1],
+                                  ci_upper = info_wtd_roc$ci[3],
+                                  type = 'wtd',
+                                  chains = w.chain,
+                                  method = 'tcr_dist'))
+    }
+  }
+  return(list("roc_data" = roc_data, 
+              "tcr_dists" = w.tcr_dists))
+}
+
+```
+
+```{r}
+tcrdists.out =
+  get.tcrdists(tcr_distances, random_tcr_distances, cdrheader, randomheader)
+tcr_dists = tcrdists.out$tcr_dists
+random_dists = tcrdists.out$random_dists
+epitopes = tcrdists.out$epitopes
+all.epitopes = tcrdists.out$all.epitopes
+tcr_sums = tcrdists.out$tcr_sums
+total_sum = tcrdists.out$total_sum
+cdrdistheader = tcrdists.out$cdrdistheader
+randomdistheader = tcrdists.out$randomdistheader
+
+rocdata.out = get.roc_data(tcr_dists, random_dists, nbrdist_percentiles, epitopes, chain)
+tcr_dists = rocdata.out$tcr_dists
+roc_data = rocdata.out$roc_data
+```
+
+
+
+```{r}
+get.roc_plot <- function(w.roc_data, w.percentile, w.source, w.chains, w.organism) {
+  roc_data2 <- w.roc_data[percentile == w.percentile]
+  roc_data2$labels <- paste0('AUC = ', round(roc_data2$auc, 4))
+  roc_data2$epitope.group <- paste0(roc_data2$antigen, ' (', roc_data2$labels, ')')
+  
+  g <- ggplot(roc_data2, aes(specificities, sensitivities)) +
+    geom_line(aes(color=epitope.group)) + 
+    scale_x_reverse(limits = rev(levels(roc_data2$specificities))) +
+    scale_color_brewer(palette = "Paired") +
+    facet_grid(~type) +
+    theme_bw() +
+    labs(title="ROC curves for different epitopes",
+         subtitle=paste0("organism: ", w.organism,
+                         "; chains: ", w.chains,
+                         "; NNdist percentile: ", w.percentile,
+                         ";\ntask: discriminate TCRs specific for selected epitope from TCRs specific to other epitopes"),
+         caption=paste0("Source: ", w.source),
+         color="Epitope sequence")
+  
+  return(g)
+}
+```
+
+
+```{r}
+get.tcr_dens_plot <- function(w.tcr_dists, w.percentile, w.source, w.chains, w.organism) {
+  tcr_dists2 <- w.tcr_dists[to_antigen %in% epitopes & percentile == w.percentile]
+  tcr_dists2$labels <- ave(tcr_dists2$dist, tcr_dists2$epitope.mdfd, tcr_dists2$type, tcr_dists2$to_antigen,
+                           FUN=function(x)paste0('n = ', length(x)))
+  tcr_dists2$epitope.group <- paste0(tcr_dists2$epitope.mdfd, ' (', tcr_dists2$labels,')')
+  g <- ggplot(tcr_dists2, aes(dist)) +
+    geom_density(aes(fill=factor(epitope.group), y=..count..), alpha=0.3) + 
+    facet_grid(type~to_antigen) + 
+    theme_bw() +
+    labs(title="Density plot of NNdist distribution for different epitope repertoires",
+         subtitle=paste0("organism: ", w.organism,
+                         "; chains: ", w.chains, 
+                         "; NNdist percentile: ", w.percentile),
+         caption=paste0("Source: ", w.source),
+         fill="Epitope sequence", 
+         x="NNdist")
+  return(g)
+}
+```
+
+```{r, fig.width=10}
+roc.plot <- get.roc_plot(roc_data, 5, "vdjdb_filtered", "AB", "Homo Sapiens")
+dens.plot <- get.tcr_dens_plot(tcr_dists, 5, "vdjdb_filtered", "AB", "Homo Sapiens")
+roc.plot
+dens.plot
+```
+
+```{r, fig.width=10}
+roc.plot <- get.roc_plot(roc_data, 10, "vdjdb_filtered", "AB", "Homo Sapiens")
+dens.plot <- get.tcr_dens_plot(tcr_dists, 10, "vdjdb_filtered", "AB", "Homo Sapiens")
+roc.plot
+dens.plot
+```
+
+```{r, fig.width=10}
+roc.plot <- get.roc_plot(roc_data, 25, "vdjdb_filtered", "AB", "Homo Sapiens")
+dens.plot <- get.tcr_dens_plot(tcr_dists, 25, "vdjdb_filtered", "AB", "Homo Sapiens")
+roc.plot
+dens.plot
+```
